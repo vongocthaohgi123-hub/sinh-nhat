@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thử thách sinh nhật 🎂</title>
+
+<style>
+    body{
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ffb6d9, #ffd6a5);
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .box{
+        background: white;
+        width: 90%;
+        max-width: 450px;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    h1{
+        color: #ff5c8a;
+    }
+
+    #question{
+        font-size: 28px;
+        margin: 30px 0;
+        font-weight: bold;
+    }
+
+    input{
+        width: 80%;
+        padding: 12px;
+        font-size: 20px;
+        text-align: center;
+        border: 2px solid #ffb6d9;
+        border-radius: 10px;
+    }
+
+    button{
+        margin-top: 20px;
+        padding: 12px 25px;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        background: #ff5c8a;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover{
+        opacity: 0.9;
+    }
+
+    #message{
+        margin-top: 20px;
+        font-size: 18px;
+        color: #e63946;
+        min-height: 24px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>🎂 Thử thách sinh nhật 🎂</h1>
+
+    <p>Vượt qua 5 câu hỏi để nhận món quà bí mật!</p>
+
+    <div id="question"></div>
+
+    <input type="number" id="answer" placeholder="Nhập đáp án">
+
+    <br>
+
+    <button onclick="checkAnswer()">Xác nhận</button>
+
+    <div id="message"></div>
+</div>
+
+<script>
+const questions = [
+    { text: "15 + 20 = ?", answer: 35 },
+    { text: "67 - 36 = ?", answer: 31 },
+    { text: "48 + 17 = ?", answer: 65 },
+    { text: "92 - 28 = ?", answer: 64 },
+    { text: "Mật mã bí mật: 89 × 8000 + 9 = ?", answer: 712009 }
+];
+
+let current = 0;
+
+const questionEl = document.getElementById("question");
+const answerEl = document.getElementById("answer");
+const messageEl = document.getElementById("message");
+
+showQuestion();
+
+function showQuestion(){
+    questionEl.textContent = questions[current].text;
+    answerEl.value = "";
+    answerEl.focus();
+}
+
+function checkAnswer(){
+    const userAnswer = Number(answerEl.value);
+
+    if(userAnswer === questions[current].answer){
+
+        current++;
+
+        if(current < questions.length){
+            messageEl.textContent = "Chính xác! 🎉";
+            showQuestion();
+        }else{
+            document.querySelector(".box").innerHTML = `
+                <h1>🎉 Chúc mừng sinh nhật! 🎉</h1>
+
+                <p style="font-size:22px; line-height:1.7;">
+                    Chúc bạn có một tuổi mới thật nhiều niềm vui,
+                    luôn hạnh phúc, mạnh khỏe và đạt được mọi điều mình mong muốn! 💖
+                </p>
+
+                <p style="font-size:50px;">🎂🎁🎈✨</p>
+            `;
+        }
+
+    }else{
+        messageEl.textContent = "Sai rồi, thử lại nhé! 😊";
+    }
+}
+
+answerEl.addEventListener("keydown", function(event){
+    if(event.key === "Enter"){
+        checkAnswer();
+    }
+});
+</script>
+
+</body>
+</html>
