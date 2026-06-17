@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trắc Nghiệm Phong Cách & Tính Cách</title>
     <style>
-        /* Giao diện nền tối tối giản, sang trọng theo ảnh mẫu */
+        /* Giao diện nền tối tối giản, sang trọng */
         body {
             background-color: #000000;
             color: #ffffff;
@@ -115,12 +115,29 @@
 
     <div class="container">
 
-        <div id="screen-input-name">
-            <h2>Chào mừng bạn! Đầu tiên hãy cho mình biết tên nhé:</h2>
+        <!-- ================= BƯỚC 0: LỜI MỜI THAM GIA ================= -->
+        <div id="screen-welcome">
+            <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">Xin chào!</h2>
+            <h2>Bạn có muốn tham gia trò chơi của mình không?</h2>
+            <button class="btn" onclick="welcomeResponse(true)">Có</button>
+            <button class="btn" onclick="welcomeResponse(false)" style="background: #222; color: #888; border: 1px solid #333;">Không</button>
+        </div>
+
+        <!-- MÀN HÌNH KHÔNG THAM GIA -->
+        <div id="screen-exit" class="hidden">
+            <h2>😭 Bạn có muốn thoát ra chứ?</h2>
+            <button class="btn" onclick="location.reload()">Quay lại chơi game</button>
+            <p style="color: #444; font-size: 14px; margin-top: 25px;">(Nếu muốn thoát, bạn có thể đóng tab trình duyệt nhé)</p>
+        </div>
+
+        <!-- ================= BƯỚC 1: NHẬP TÊN (NẾU CHỌN CÓ) ================= -->
+        <div id="screen-input-name" class="hidden">
+            <h2>Hihi, vậy trước tiên cho mình biết tên của bạn nè ><</h2>
             <input type="text" id="user-name-input" class="input-field" placeholder="Nhập tên của bạn tại đây...">
             <button class="btn" onclick="saveName()">Tiếp tục</button>
         </div>
 
+        <!-- ================= BƯỚC 2: CHỌN GIỚI TÍNH ================= -->
         <div id="screen-gender" class="hidden">
             <h2>Bạn là nam hay là nữ?</h2>
             <button class="btn" onclick="chooseGender('nam')">Nam</button>
@@ -128,6 +145,11 @@
         </div>
 
 
+        <!-- ======================================================= -->
+        <!--                   NHÁNH DÀNH CHO NỮ                     -->
+        <!-- ======================================================= -->
+
+        <!-- NỮ - BƯỚC 3: CHỌN TÓC NỮ -->
         <div id="screen-hair-female" class="hidden">
             <h2>Đâu là phong cách kiểu tóc của bạn?</h2>
             <div class="hair-grid">
@@ -150,6 +172,7 @@
             </div>
         </div>
 
+        <!-- NỮ - BƯỚC 4: CHỌN TRANG PHỤC NỮ -->
         <div id="screen-outfit-female" class="hidden">
             <h2>Đâu là phong cách ăn mặc của bạn?</h2>
             <div class="hair-grid">
@@ -172,6 +195,7 @@
             </div>
         </div>
 
+        <!-- NỮ - BƯỚC 5: CHỌN MAKE UP NỮ -->
         <div id="screen-makeup-female" class="hidden">
             <h2>Đâu là phong cách make up của bạn?</h2>
             <div class="hair-grid">
@@ -195,6 +219,11 @@
         </div>
 
 
+        <!-- ======================================================= -->
+        <!--                   NHÁNH DÀNH CHO NAM                     -->
+        <!-- ======================================================= -->
+
+        <!-- NAM - BƯỚC 3: CHỌN TÓC NAM -->
         <div id="screen-hair-male" class="hidden">
             <h2>Đâu là phong cách kiểu tóc của bạn?</h2>
             <div class="hair-grid">
@@ -217,6 +246,7 @@
             </div>
         </div>
 
+        <!-- NAM - BƯỚC 4: CHỌN TRANG PHỤC NAM -->
         <div id="screen-outfit-male" class="hidden">
             <h2>Đâu là phong cách ăn mặc của bạn?</h2>
             <div class="hair-grid">
@@ -239,6 +269,7 @@
             </div>
         </div>
 
+        <!-- NAM - BƯỚC 5: CHỌN KHUÔN MẶT NAM -->
         <div id="screen-face-male" class="hidden">
             <h2>Đâu là phong cách khuôn mặt (make up) của bạn?</h2>
             <div class="hair-grid">
@@ -262,6 +293,9 @@
         </div>
 
 
+        <!-- ======================================================= -->
+        <!--                 MÀN HÌNH KẾT QUẢ CHUNG                  -->
+        <!-- ======================================================= -->
         <div id="screen-result" class="hidden" style="padding: 20px 0;">
             <p style="color: #666; font-size: 15px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Kết quả của <span id="result-user-name" style="color: #fff; font-weight: bold;">Bạn</span></p>
             
@@ -283,6 +317,7 @@
 
     </div>
 
+    <!-- ==================== LOGIC XỬ LÝ GAME ==================== -->
     <script>
         // Các biến lưu thông tin lựa chọn của người chơi
         let nameUser = "";
@@ -290,6 +325,16 @@
         let userHair = "";
         let userOutfit = "";
         let userMakeup = "";
+
+        // Bước 0: Xử lý phản hồi lời mời chơi game
+        function welcomeResponse(isParticipating) {
+            document.getElementById('screen-welcome').classList.add('hidden');
+            if (isParticipating) {
+                document.getElementById('screen-input-name').classList.remove('hidden');
+            } else {
+                document.getElementById('screen-exit').classList.remove('hidden');
+            }
+        }
 
         // Bước 1: Lưu tên người dùng
         function saveName() {
