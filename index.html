@@ -106,8 +106,173 @@
             alert("Bạn chưa nhập tên kìa!");
         } else {
             nameUser = inputVal;
-            alert("Hế lô " + nameUser + "! Chuẩn bị sang Bước tiếp theo nha.");
-            // Chỗ này lát nữa chúng mình sẽ viết code cho Bước 2 vào đây
+            <style>
+    /* Thiết kế riêng cho lưới chọn kiểu tóc */
+    .hair-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Chia thành 2 cột đều nhau */
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .hair-option {
+        background: #1a1a1a;
+        border: 2px solid #ffffff;
+        border-radius: 10px;
+        padding: 8px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    .hair-option:hover {
+        transform: scale(1.03);
+        border-color: #0ea5e9; /* Đổi viền sang xanh khi chạm */
+    }
+    .hair-option img {
+        width: 100%;
+        height: 180px; /* Chiều cao vừa vặn để không bị tràn màn hình */
+        object-fit: cover; /* Giúp ảnh không bị méo */
+        border-radius: 6px;
+    }
+    .hair-label {
+        display: block;
+        margin-top: 5px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+</style>
+
+<div id="screen-gender" class="hidden">
+    <h2>Bạn là nam hay là nữ?</h2>
+    <button class="btn" onclick="chooseGender('nam')">Nam</button>
+    <button class="btn" onclick="chooseGender('nu')">Nữ</button>
+</div>
+
+<div id="screen-hair-female" class="hidden">
+    <h2>Đâu là phong cách kiểu tóc của bạn?</h2>
+    
+    <div class="hair-grid">
+        <div class="hair-option" onclick="selectHair('Kiểu tóc 1')">
+            <img src="ao1.jpg" alt="Tóc đen trắng">
+            <span class="hair-label">Kiểu 1</span>
+        </div>
+        <div class="hair-option" onclick="selectHair('Kiểu tóc 2')">
+            <img src="ao2.jpg" alt="Tóc hồng bối đôi">
+            <span class="hair-label">Kiểu 2</span>
+        </div>
+        <div class="hair-option" onclick="selectHair('Kiểu tóc 3')">
+            <img src="ao3.jpg" alt="Tóc nâu ngắn layer">
+            <span class="hair-label">Kiểu 3</span>
+        </div>
+        <div class="hair-option" onclick="selectHair('Kiểu tóc 4')">
+            <img src="ao4.jpg" alt="Tóc nâu dài sóng">
+            <span class="hair-label">Kiểu 4</span>
+        </div>
+    </div>
+</div>
+<script>
+    let userGender = ""; // Biến lưu giới tính
+    let userHair = "";   // Biến lưu kiểu tóc được chọn
+
+    // Lệnh này sẽ được kích hoạt ngay sau khi hàm saveName() ở Bước 1 chạy xong
+    function goToGenderScreen() {
+        document.getElementById('screen-input-name').classList.add('hidden');
+        document.getElementById('screen-gender').classList.remove('hidden');
+    }
+
+    // Xử lý khi chọn Nam hoặc Nữ
+    function chooseGender(gender) {
+        userGender = gender;
+        if (gender === 'nu') {
+            // Chuyển sang màn hình chọn kiểu tóc nữ
+            document.getElementById('screen-gender').classList.add('hidden');
+            document.getElementById('screen-hair-female').classList.remove('hidden');
+        } else {
+            // Tạm thời báo tính năng nam đang phát triển
+            alert("Bạn chọn Nam đúng không? Lát nữa tụi mình làm tiếp nhánh cho Nam nha!");
         }
     }
+
+    // Xử lý khi bạn Nữ chọn 1 trong 4 kiểu tóc
+    function selectHair(hairName) {
+    userHair = hairName;
+    // Tự động gọi màn hình chọn trang phục xuất hiện
+    goToOutfitScreen(); 
+}
+<div id="screen-outfit-female" class="hidden">
+    <h2>Đâu là phong cách ăn mặc của bạn?</h2>
+    
+    <div class="hair-grid">
+        <div class="hair-option" onclick="selectOutfit('Phong cách Ngầu / Cá tính')">
+            <img src="bo1.jpg" alt="Áo sơ mi caro">
+            <span class="hair-label">Phong cách 1</span>
+        </div>
+        <div class="hair-option" onclick="selectOutfit('Phong cách Công sở / Lịch lãm')">
+            <img src="bo2.jpg" alt="Vest đen">
+            <span class="hair-label">Phong cách 2</span>
+        </div>
+        <div class="hair-option" onclick="selectOutfit('Phong cách Đáng yêu / Lolita')">
+            <img src="bo3.jpg" alt="Đầm hồng trắng">
+            <span class="hair-label">Phong cách 3</span>
+        </div>
+        <div class="hair-option" onclick="selectOutfit('Phong cách Nhẹ nhàng / Nữ tính')">
+            <img src="bo4.jpg" alt="Áo khoác xanh váy trắng">
+            <span class="hair-label">Phong cách 4</span>
+        </div>
+    </div>
+</div>
+<script>
+    let userOutfit = ""; // Biến lưu phong cách trang phục được chọn
+
+    // Lệnh này dùng để kích hoạt màn hình chọn đồ (sẽ nối vào cuối hàm chọn tóc của Bước 2)
+    function goToOutfitScreen() {
+        document.getElementById('screen-hair-female').classList.add('hidden');
+        document.getElementById('screen-outfit-female').classList.remove('hidden');
+    }
+
+    // Xử lý khi bạn Nữ chọn 1 trong 4 phong cách ăn mặc
+    function selectOutfit(outfitName) {
+        userOutfit = outfitName;
+        alert("Bạn đã chọn: " + userOutfit + "!");
+        // Chỗ này đã sẵn sàng để chuyển tiếp sang Bước 4
+    }
 </script>
+<!-- Màn hình 7: Chọn phong cách Make up (Dành cho Nữ) -->
+<div id="screen-makeup-female" class="hidden">
+    <h2>Đâu là phong cách make up của bạn?</h2>
+    
+    <div class="hair-grid">
+        <!-- Lựa chọn make up 1 -->
+        <div class="hair-option" onclick="selectMakeup('Gothic / Đậm cá tính')">
+            <img src="co1.jpg" alt="Make up Gothic tone trầm">
+            <span class="hair-label">Phong cách 1</span>
+        </div>
+        <!-- Lựa chọn make up 2 -->
+        <div class="hair-option" onclick="selectMakeup('Tự nhiên / Tây nhẹ nhàng')">
+            <img src="co2.jpg" alt="Make up tự nhiên mắt mèo">
+            <span class="hair-label">Phong cách 2</span>
+        </div>
+        <!-- Lựa chọn make up 3 -->
+        <div class="hair-option" onclick="selectMakeup('Dark Lolita / Sắc sảo')">
+            <img src="co3.jpg" alt="Make up phong cách anime cá tính">
+            <span class="hair-label">Phong cách 3</span>
+        </div>
+        <!-- Lựa chọn make up 4 -->
+        <div class="hair-option" onclick="selectMakeup('Trong trẻo / Douyin')">
+            <img src="co4.jpg" alt="Make up trong trẻo má hồng">
+            <span class="hair-label">Phong cách 4</span>
+        </div>
+    </div>
+</div>
+    let userMakeup = ""; // Biến lưu phong cách trang điểm được chọn
+
+    // Lệnh này dùng để kích hoạt màn hình chọn make up
+    function goToMakeupScreen() {
+        document.getElementById('screen-outfit-female').classList.add('hidden');
+        document.getElementById('screen-makeup-female').classList.remove('hidden');
+    }
+
+    // Xử lý khi bạn Nữ chọn 1 trong 4 phong cách make up
+    function selectMakeup(makeupName) {
+        userMakeup = makeupName;
+        alert("Bạn đã chọn phong cách make up: " + userMakeup + "!");
+        // Chỗ này đã sẵn sàng để chuyển tiếp sang Bước 5
+    }
