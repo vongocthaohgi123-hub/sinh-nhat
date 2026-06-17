@@ -276,3 +276,84 @@
         alert("Bạn đã chọn phong cách make up: " + userMakeup + "!");
         // Chỗ này đã sẵn sàng để chuyển tiếp sang Bước 5
     }
+<!-- Màn hình 8: Kết quả Tính cách độc bản -->
+<div id="screen-result" class="hidden" style="text-align: center; padding: 20px 10px;">
+    <!-- Lời chào cá nhân hóa theo tên người chơi -->
+    <p style="color: #888; font-size: 16px; margin-bottom: 5px;">Kết quả của <span id="result-user-name" style="color: #fff; font-weight: bold;">Bạn</span></p>
+    
+    <!-- Danh hiệu tính cách chính -->
+    <h1 id="personality-title" style="font-size: 32px; font-weight: bold; margin-top: 10px; margin-bottom: 5px; letter-spacing: 1px;">Cô gái bình thường</h1>
+    
+    <!-- Tên tiếng Anh / Danh hiệu phụ -->
+    <p id="personality-sub" style="color: #666; font-size: 18px; margin-bottom: 40px; font-style: italic;">Girl Next Door</p>
+    
+    <!-- Đoạn văn mô tả tính cách chi tiết -->
+    <p id="personality-desc" style="font-size: 18px; line-height: 1.8; color: #ccc; max-width: 320px; margin: 0 auto 40px auto; text-align: center;">
+        Bạn sống đơn giản, thực tế và không thích trở thành tâm điểm chú ý. Dù không quá nổi bật, bạn lại là kiểu người khiến người khác cảm thấy thoải mái khi ở bên.
+    </p>
+    
+    <!-- Chỉ số độ hiếm và xếp hạng giống ảnh mẫu 2948.jpg -->
+    <div style="color: #555; font-size: 14px; margin-top: 20px;">
+        <span id="personality-rarity">Độ hiếm: 22%</span>
+        <span style="margin: 0 10px;">•</span>
+        <span id="personality-rank">Xếp hạng: 8/8</span>
+    </div>
+    
+    <!-- Nút chơi lại từ đầu nếu muốn thử phong cách khác -->
+    <button class="btn" onclick="location.reload()" style="margin-top: 40px; background: #222; border: 1px solid #444; font-size: 14px; padding: 8px 20px;">Chơi lại từ đầu</button>
+</div>
+  // Hàm xử lý tính toán kết quả dựa trên các lựa chọn trước đó
+    function calculatePersonality() {
+        // Hiển thị tên người chơi lên màn hình kết quả
+        document.getElementById('result-user-name').innerText = nameUser;
+
+        let title = "";
+        let sub = "";
+        let desc = "";
+        let rarity = "";
+        let rank = "";
+
+        // THẦN THÁI 1: Nếu người chơi chọn Trang phục Ngầu (bo1) hoặc Make up Gothic (co1)
+        if (userOutfit.includes('Ngầu') || userMakeup.includes('Gothic')) {
+            title = "Nữ vương Rebel";
+            sub = "The Rebel Queen";
+            desc = "Bạn sở hữu một nguồn năng lượng mạnh mẽ, độc lập và đầy bí ẩn. Bạn không bận tâm đến những quy chuẩn thông thường, luôn kiên định với chất riêng và luôn là người dẫn đầu xu hướng khiến ai cũng phải ngoái nhìn.";
+            rarity = "Độ hiếm: 5%";
+            rank = "Xếp hạng: 1/8";
+        }
+        // THẦN THÁI 2: Nếu chọn đồ Đáng yêu (bo3) hoặc Make up Trong trẻo (co4) hoặc Tóc hồng (Kiểu tóc 2)
+        else if (userOutfit.includes('Đáng yêu') || userMakeup.includes('Trong trẻo') || userHair === 'Kiểu tóc 2') {
+            title = "Nàng thơ Kẹo ngọt";
+            sub = "The Sweet Muse";
+            desc = "Mang trong mình tâm hồn trong sáng, tràn đầy năng lượng tích cực và sự ấm áp. Bạn đi đến đâu là mang tiếng cười đến đó. Sự tinh tế và nét đáng yêu tự nhiên của bạn chính là liều thuốc chữa lành cho mọi người xung quanh.";
+            rarity = "Độ hiếm: 15%";
+            rank = "Xếp hạng: 4/8";
+        }
+        // THẦN THÁI 3: Nếu chọn đồ Công sở/Lịch lãm (bo2) hoặc tóc nâu dài sóng (Kiểu tóc 4)
+        else if (userOutfit.includes('Công sở') || userHair === 'Kiểu tóc 4') {
+            title = "Quý cô Thanh lịch";
+            sub = "The Elegant Lady";
+            desc = "Sự trưởng thành, điềm tĩnh và gu thẩm mỹ tinh tế là những từ khóa dành riêng cho bạn. Bạn luôn biết cách làm chủ mọi tình huống bằng sự khôn khéo, thông minh và phong thái tự tin, sang trọng của mình.";
+            rarity = "Độ hiếm: 10%";
+            rank = "Xếp hạng: 2/8";
+        }
+        // THẦN THÁI 4: Trường hợp cân bằng, đơn giản còn lại (Giống hệt ảnh mẫu 2948.jpg của bạn)
+        else {
+            title = "Cô gái bình thường";
+            sub = "Girl Next Door";
+            desc = "Bạn sống đơn giản, thực tế và không thích trở thành tâm điểm chú ý. Dù không quá nổi bật, bạn lại là kiểu người khiến người khác cảm thấy thoải mái, an tâm và tin tưởng tuyệt đối khi ở bên cạnh.";
+            rarity = "Độ hiếm: 22%";
+            rank = "Xếp hạng: 8/8";
+        }
+
+        // Đổ toàn bộ dữ liệu đã tính toán được lên giao diện màn hình kết quả
+        document.getElementById('personality-title').innerText = title;
+        document.getElementById('personality-sub').innerText = sub;
+        document.getElementById('personality-desc').innerText = desc;
+        document.getElementById('personality-rarity').innerText = rarity;
+        document.getElementById('personality-rank').innerText = rank;
+
+        // Ẩn màn hình chọn make up và hiện màn hình kết quả lên
+        document.getElementById('screen-makeup-female').classList.add('hidden');
+        document.getElementById('screen-result').classList.remove('hidden');
+    }
