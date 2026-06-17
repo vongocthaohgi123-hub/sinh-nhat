@@ -1,359 +1,336 @@
-<style>
-    body {
-        background-color: #000000; /* Đen hoàn toàn */
-        color: #ffffff; /* Chữ trắng */
-        font-family: 'Segoe UI', sans-serif;
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        user-select: none; /* Không cho bôi đen chữ khi bấm màn hình */
-    }
-    .container {
-        padding: 20px;
-        width: 100%;
-        max-width: 400px;
-    }
-    .hidden {
-        display: none !important; /* Dùng để ẩn các màn hình chưa dùng tới */
-    }
-    .btn {
-        background-color: #ffffff;
-        color: #000000;
-        border: none;
-        padding: 10px 25px;
-        font-size: 16px;
-        font-weight: bold;
-        margin: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .input-box {
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 2px solid #ffffff;
-        background: transparent;
-        color: #ffffff;
-        text-align: center;
-        margin-bottom: 15px;
-        width: 80%;
-        outline: none;
-    }
-    h1, h2 {
-        line-height: 1.4;
-    }
-</style>
-
-<div class="container">
-    <div id="screen-hello" onclick="goToQuestion1()">
-        <h1>xin chào</h1>
-        <p style="color: #666; font-size: 14px;">(Chạm vào màn hình để tiếp tục)</p>
-    </div>
-
-    <div id="screen-ask" class="hidden">
-        <h2>Bạn có muốn tham gia trò chơi của mình không?</h2>
-        <button class="btn" onclick="chooseJoin('yes')">Có</button>
-        <button class="btn" onclick="chooseJoin('no')">Không</button>
-    </div>
-
-    <div id="screen-sad" class="hidden">
-        <h1 style="font-size: 60px;">😭</h1>
-        <h2>Bạn có muốn thoát ra không?</h2>
-        <button class="btn" onclick="alert('Hãy tắt tab trình duyệt để thoát nhé!')">Thoát</button>
-        <button class="btn" onclick="backToAsk()">Quay lại chơi</button>
-    </div>
-
-    <div id="screen-input-name" class="hidden">
-        <h2>Hãy nhập tên của bạn</h2>
-        <input type="text" id="player-name" class="input-box" placeholder="Nhập tên ở đây..."><br>
-        <button class="btn" onclick="saveName()">Tiếp tục</button>
-    </div>
-</div>
-<script>
-    // 1. Bấm vào màn hình "xin chào" để qua câu hỏi
-    function goToQuestion1() {
-        document.getElementById('screen-hello').classList.add('hidden');
-        document.getElementById('screen-ask').classList.remove('hidden');
-    }
-
-    // 2. Xử lý khi chọn Có hoặc Không
-    function chooseJoin(answer) {
-        if (answer === 'no') {
-            // Hiện màn hình khóc
-            document.getElementById('screen-ask').classList.add('hidden');
-            document.getElementById('screen-sad').classList.remove('hidden');
-        } else {
-            // Hiện màn hình nhập tên
-            document.getElementById('screen-ask').classList.add('hidden');
-            document.getElementById('screen-input-name').classList.remove('hidden');
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Phong Cách & Tính Cách</title>
+    <style>
+        /* Phong cách nền tối tối giản, sang trọng theo ảnh mẫu */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-    }
 
-    // 2.5. Quay lại nếu lỡ bấm Không nhưng muốn chơi tiếp
-    function backToAsk() {
-        document.getElementById('screen-sad').classList.add('hidden');
-        document.getElementById('screen-ask').classList.remove('hidden');
-    }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-    // 3. Lưu tên người chơi khi bấm Tiếp tục
-    let nameUser = "";
-    function saveName() {
-        let inputVal = document.getElementById('player-name').value.trim();
-        if (inputVal === "") {
-            alert("Bạn chưa nhập tên kìa!");
-        } else {
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Thiết kế ô nhập tên */
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #666;
+        }
+
+        /* Nút bấm chung */
+        .btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 12px;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #cccccc;
+        }
+
+        /* Lưới hiển thị hình ảnh chọn Tóc / Đồ / Make up (2 hàng x 2 cột) */
+        .hair-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .hair-option {
+            background: #111111;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            padding: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .hair-option:hover {
+            transform: scale(1.02);
+            border-color: #ffffff;
+        }
+
+        .hair-option img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .hair-label {
+            display: block;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* Ẩn các màn hình chưa kích hoạt */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ================= BƯỚC 1: NHẬP TÊN ================= -->
+        <div id="screen-input-name">
+            <h2>Chào mừng bạn! Đầu tiên hãy cho mình biết tên nhé:</h2>
+            <input type="text" id="user-name-input" class="input-field" placeholder="Nhập tên của bạn tại đây...">
+            <button class="btn" onclick="saveName()">Tiếp tục</button>
+        </div>
+
+        <!-- ================= BƯỚC 2: CHỌN GIỚI TÍNH ================= -->
+        <div id="screen-gender" class="hidden">
+            <h2>Bạn là nam hay là nữ?</h2>
+            <button class="btn" onclick="chooseGender('nam')">Nam</button>
+            <button class="btn" onclick="chooseGender('nu')">Nữ</button>
+        </div>
+
+        <!-- ================= BƯỚC 2.5: CHỌN KIỂU TÓC NỮ ================= -->
+        <div id="screen-hair-female" class="hidden">
+            <h2>Đâu là phong cách kiểu tóc của bạn?</h2>
+            <div class="hair-grid">
+                <div class="hair-option" onclick="selectHair('Kiểu tóc 1')">
+                    <img src="ao1.jpg" alt="Tóc đen trắng">
+                    <span class="hair-label">Kiểu 1</span>
+                </div>
+                <div class="hair-option" onclick="selectHair('Kiểu tóc 2')">
+                    <img src="ao2.jpg" alt="Tóc hồng bối đôi">
+                    <span class="hair-label">Kiểu 2</span>
+                </div>
+                <div class="hair-option" onclick="selectHair('Kiểu tóc 3')">
+                    <img src="ao3.jpg" alt="Tóc nâu ngắn layer">
+                    <span class="hair-label">Kiểu 3</span>
+                </div>
+                <div class="hair-option" onclick="selectHair('Kiểu tóc 4')">
+                    <img src="ao4.jpg" alt="Tóc nâu dài sóng">
+                    <span class="hair-label">Kiểu 4</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BƯỚC 3: CHỌN TRANG PHỤC NỮ ================= -->
+        <div id="screen-outfit-female" class="hidden">
+            <h2>Đâu là phong cách ăn mặc của bạn?</h2>
+            <div class="hair-grid">
+                <div class="hair-option" onclick="selectOutfit('Phong cách Ngầu / Cá tính')">
+                    <img src="bo1.jpg" alt="Áo sơ mi caro">
+                    <span class="hair-label">Phong cách 1</span>
+                </div>
+                <div class="hair-option" onclick="selectOutfit('Phong cách Công sở / Lịch lãm')">
+                    <img src="bo2.jpg" alt="Vest đen">
+                    <span class="hair-label">Phong cách 2</span>
+                </div>
+                <div class="hair-option" onclick="selectOutfit('Phong cách Đáng yêu / Lolita')">
+                    <img src="bo3.jpg" alt="Đầm hồng trắng">
+                    <span class="hair-label">Phong cách 3</span>
+                </div>
+                <div class="hair-option" onclick="selectOutfit('Phong cách Nhẹ nhàng / Nữ tính')">
+                    <img src="bo4.jpg" alt="Áo khoác xanh váy trắng">
+                    <span class="hair-label">Phong cách 4</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BƯỚC 4: CHỌN MAKE UP NỮ ================= -->
+        <div id="screen-makeup-female" class="hidden">
+            <h2>Đâu là phong cách make up của bạn?</h2>
+            <div class="hair-grid">
+                <div class="hair-option" onclick="selectMakeup('Gothic / Đậm cá tính')">
+                    <img src="co1.jpg" alt="Make up Gothic tone trầm">
+                    <span class="hair-label">Phong cách 1</span>
+                </div>
+                <div class="hair-option" onclick="selectMakeup('Tự nhiên / Tây nhẹ nhàng')">
+                    <img src="co2.jpg" alt="Make up tự nhiên mắt mèo">
+                    <span class="hair-label">Phong cách 2</span>
+                </div>
+                <div class="hair-option" onclick="selectMakeup('Dark Lolita / Sắc sảo')">
+                    <img src="co3.jpg" alt="Make up phong cách anime cá tính">
+                    <span class="hair-label">Phong cách 3</span>
+                </div>
+                <div class="hair-option" onclick="selectMakeup('Trong trẻo / Douyin')">
+                    <img src="co4.jpg" alt="Make up trong trẻo má hồng">
+                    <span class="hair-label">Phong cách 4</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BƯỚC 5: KẾT QUẢ TÍNH CÁCH ================= -->
+        <div id="screen-result" class="hidden" style="padding: 20px 0;">
+            <p style="color: #666; font-size: 15px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Kết quả của <span id="result-user-name" style="color: #fff; font-weight: bold;">Bạn</span></p>
+            
+            <h1 id="personality-title" style="font-size: 32px; font-weight: bold; margin-top: 10px; margin-bottom: 5px; letter-spacing: 0.5px;">Cô gái bình thường</h1>
+            <p id="personality-sub" style="color: #666; font-size: 16px; margin-bottom: 40px; font-style: italic;">Girl Next Door</p>
+            
+            <p id="personality-desc" style="font-size: 16px; line-height: 1.8; color: #aaaaaa; max-width: 320px; margin: 0 auto 50px auto; text-align: center;">
+                Bạn sống đơn giản, thực tế và không thích trở thành tâm điểm chú ý. Dù không quá nổi bật, bạn lại là kiểu người khiến người khác cảm thấy thoải mái khi ở bên.
+            </p>
+            
+            <div style="color: #444; font-size: 13px; margin-top: 20px; font-weight: 500;">
+                <span id="personality-rarity">Độ hiếm: 22%</span>
+                <span style="margin: 0 10px;">•</span>
+                <span id="personality-rank">Xếp hạng: 8/8</span>
+            </div>
+            
+            <button class="btn" onclick="location.reload()" style="margin-top: 45px; background: #111; border: 1px solid #333; color: #888; font-size: 14px; padding: 10px 20px; width: auto; border-radius: 6px;">Chơi lại từ đầu</button>
+        </div>
+
+    </div>
+
+    <!-- ================= TOÀN BỘ SCRIPT XỬ LÝ GAME ================= -->
+    <script>
+        // Các biến lưu trữ thông tin lựa chọn của người chơi
+        let nameUser = "";
+        let userGender = "";
+        let userHair = "";
+        let userOutfit = "";
+        let userMakeup = "";
+
+        // Bước 1: Lưu tên người chơi và chuyển màn hình
+        function saveName() {
+            let inputVal = document.getElementById('user-name-input').value;
+            if (inputVal.trim() === "") {
+                alert("Vui lòng nhập tên của bạn trước khi tiếp tục nha!");
+                return;
+            }
             nameUser = inputVal;
-            <style>
-    /* Thiết kế riêng cho lưới chọn kiểu tóc */
-    .hair-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* Chia thành 2 cột đều nhau */
-        gap: 15px;
-        margin-top: 20px;
-    }
-    .hair-option {
-        background: #1a1a1a;
-        border: 2px solid #ffffff;
-        border-radius: 10px;
-        padding: 8px;
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
-    .hair-option:hover {
-        transform: scale(1.03);
-        border-color: #0ea5e9; /* Đổi viền sang xanh khi chạm */
-    }
-    .hair-option img {
-        width: 100%;
-        height: 180px; /* Chiều cao vừa vặn để không bị tràn màn hình */
-        object-fit: cover; /* Giúp ảnh không bị méo */
-        border-radius: 6px;
-    }
-    .hair-label {
-        display: block;
-        margin-top: 5px;
-        font-size: 14px;
-        font-weight: bold;
-    }
-</style>
-
-<div id="screen-gender" class="hidden">
-    <h2>Bạn là nam hay là nữ?</h2>
-    <button class="btn" onclick="chooseGender('nam')">Nam</button>
-    <button class="btn" onclick="chooseGender('nu')">Nữ</button>
-</div>
-
-<div id="screen-hair-female" class="hidden">
-    <h2>Đâu là phong cách kiểu tóc của bạn?</h2>
-    
-    <div class="hair-grid">
-        <div class="hair-option" onclick="selectHair('Kiểu tóc 1')">
-            <img src="ao1.jpg" alt="Tóc đen trắng">
-            <span class="hair-label">Kiểu 1</span>
-        </div>
-        <div class="hair-option" onclick="selectHair('Kiểu tóc 2')">
-            <img src="ao2.jpg" alt="Tóc hồng bối đôi">
-            <span class="hair-label">Kiểu 2</span>
-        </div>
-        <div class="hair-option" onclick="selectHair('Kiểu tóc 3')">
-            <img src="ao3.jpg" alt="Tóc nâu ngắn layer">
-            <span class="hair-label">Kiểu 3</span>
-        </div>
-        <div class="hair-option" onclick="selectHair('Kiểu tóc 4')">
-            <img src="ao4.jpg" alt="Tóc nâu dài sóng">
-            <span class="hair-label">Kiểu 4</span>
-        </div>
-    </div>
-</div>
-<script>
-    let userGender = ""; // Biến lưu giới tính
-    let userHair = "";   // Biến lưu kiểu tóc được chọn
-
-    // Lệnh này sẽ được kích hoạt ngay sau khi hàm saveName() ở Bước 1 chạy xong
-    function goToGenderScreen() {
-        document.getElementById('screen-input-name').classList.add('hidden');
-        document.getElementById('screen-gender').classList.remove('hidden');
-    }
-
-    // Xử lý khi chọn Nam hoặc Nữ
-    function chooseGender(gender) {
-        userGender = gender;
-        if (gender === 'nu') {
-            // Chuyển sang màn hình chọn kiểu tóc nữ
-            document.getElementById('screen-gender').classList.add('hidden');
-            document.getElementById('screen-hair-female').classList.remove('hidden');
-        } else {
-            // Tạm thời báo tính năng nam đang phát triển
-            alert("Bạn chọn Nam đúng không? Lát nữa tụi mình làm tiếp nhánh cho Nam nha!");
-        }
-    }
-
-    // Xử lý khi bạn Nữ chọn 1 trong 4 kiểu tóc
-    function selectHair(hairName) {
-    userHair = hairName;
-    // Tự động gọi màn hình chọn trang phục xuất hiện
-    goToOutfitScreen(); 
-}
-<div id="screen-outfit-female" class="hidden">
-    <h2>Đâu là phong cách ăn mặc của bạn?</h2>
-    
-    <div class="hair-grid">
-        <div class="hair-option" onclick="selectOutfit('Phong cách Ngầu / Cá tính')">
-            <img src="bo1.jpg" alt="Áo sơ mi caro">
-            <span class="hair-label">Phong cách 1</span>
-        </div>
-        <div class="hair-option" onclick="selectOutfit('Phong cách Công sở / Lịch lãm')">
-            <img src="bo2.jpg" alt="Vest đen">
-            <span class="hair-label">Phong cách 2</span>
-        </div>
-        <div class="hair-option" onclick="selectOutfit('Phong cách Đáng yêu / Lolita')">
-            <img src="bo3.jpg" alt="Đầm hồng trắng">
-            <span class="hair-label">Phong cách 3</span>
-        </div>
-        <div class="hair-option" onclick="selectOutfit('Phong cách Nhẹ nhàng / Nữ tính')">
-            <img src="bo4.jpg" alt="Áo khoác xanh váy trắng">
-            <span class="hair-label">Phong cách 4</span>
-        </div>
-    </div>
-</div>
-<script>
-    let userOutfit = ""; // Biến lưu phong cách trang phục được chọn
-
-    // Lệnh này dùng để kích hoạt màn hình chọn đồ (sẽ nối vào cuối hàm chọn tóc của Bước 2)
-    function goToOutfitScreen() {
-        document.getElementById('screen-hair-female').classList.add('hidden');
-        document.getElementById('screen-outfit-female').classList.remove('hidden');
-    }
-
-    // Xử lý khi bạn Nữ chọn 1 trong 4 phong cách ăn mặc
-    function selectOutfit(outfitName) {
-        userOutfit = outfitName;
-        alert("Bạn đã chọn: " + userOutfit + "!");
-        // Chỗ này đã sẵn sàng để chuyển tiếp sang Bước 4
-    }
-</script>
-<!-- Màn hình 7: Chọn phong cách Make up (Dành cho Nữ) -->
-<div id="screen-makeup-female" class="hidden">
-    <h2>Đâu là phong cách make up của bạn?</h2>
-    
-    <div class="hair-grid">
-        <!-- Lựa chọn make up 1 -->
-        <div class="hair-option" onclick="selectMakeup('Gothic / Đậm cá tính')">
-            <img src="co1.jpg" alt="Make up Gothic tone trầm">
-            <span class="hair-label">Phong cách 1</span>
-        </div>
-        <!-- Lựa chọn make up 2 -->
-        <div class="hair-option" onclick="selectMakeup('Tự nhiên / Tây nhẹ nhàng')">
-            <img src="co2.jpg" alt="Make up tự nhiên mắt mèo">
-            <span class="hair-label">Phong cách 2</span>
-        </div>
-        <!-- Lựa chọn make up 3 -->
-        <div class="hair-option" onclick="selectMakeup('Dark Lolita / Sắc sảo')">
-            <img src="co3.jpg" alt="Make up phong cách anime cá tính">
-            <span class="hair-label">Phong cách 3</span>
-        </div>
-        <!-- Lựa chọn make up 4 -->
-        <div class="hair-option" onclick="selectMakeup('Trong trẻo / Douyin')">
-            <img src="co4.jpg" alt="Make up trong trẻo má hồng">
-            <span class="hair-label">Phong cách 4</span>
-        </div>
-    </div>
-</div>
-    let userMakeup = ""; // Biến lưu phong cách trang điểm được chọn
-
-    // Lệnh này dùng để kích hoạt màn hình chọn make up
-    function goToMakeupScreen() {
-        document.getElementById('screen-outfit-female').classList.add('hidden');
-        document.getElementById('screen-makeup-female').classList.remove('hidden');
-    }
-
-    // Xử lý khi bạn Nữ chọn 1 trong 4 phong cách make up
-    function selectMakeup(makeupName) {
-        userMakeup = makeupName;
-        alert("Bạn đã chọn phong cách make up: " + userMakeup + "!");
-        // Chỗ này đã sẵn sàng để chuyển tiếp sang Bước 5
-    }
-<!-- Màn hình 8: Kết quả Tính cách độc bản -->
-<div id="screen-result" class="hidden" style="text-align: center; padding: 20px 10px;">
-    <!-- Lời chào cá nhân hóa theo tên người chơi -->
-    <p style="color: #888; font-size: 16px; margin-bottom: 5px;">Kết quả của <span id="result-user-name" style="color: #fff; font-weight: bold;">Bạn</span></p>
-    
-    <!-- Danh hiệu tính cách chính -->
-    <h1 id="personality-title" style="font-size: 32px; font-weight: bold; margin-top: 10px; margin-bottom: 5px; letter-spacing: 1px;">Cô gái bình thường</h1>
-    
-    <!-- Tên tiếng Anh / Danh hiệu phụ -->
-    <p id="personality-sub" style="color: #666; font-size: 18px; margin-bottom: 40px; font-style: italic;">Girl Next Door</p>
-    
-    <!-- Đoạn văn mô tả tính cách chi tiết -->
-    <p id="personality-desc" style="font-size: 18px; line-height: 1.8; color: #ccc; max-width: 320px; margin: 0 auto 40px auto; text-align: center;">
-        Bạn sống đơn giản, thực tế và không thích trở thành tâm điểm chú ý. Dù không quá nổi bật, bạn lại là kiểu người khiến người khác cảm thấy thoải mái khi ở bên.
-    </p>
-    
-    <!-- Chỉ số độ hiếm và xếp hạng giống ảnh mẫu 2948.jpg -->
-    <div style="color: #555; font-size: 14px; margin-top: 20px;">
-        <span id="personality-rarity">Độ hiếm: 22%</span>
-        <span style="margin: 0 10px;">•</span>
-        <span id="personality-rank">Xếp hạng: 8/8</span>
-    </div>
-    
-    <!-- Nút chơi lại từ đầu nếu muốn thử phong cách khác -->
-    <button class="btn" onclick="location.reload()" style="margin-top: 40px; background: #222; border: 1px solid #444; font-size: 14px; padding: 8px 20px;">Chơi lại từ đầu</button>
-</div>
-  // Hàm xử lý tính toán kết quả dựa trên các lựa chọn trước đó
-    function calculatePersonality() {
-        // Hiển thị tên người chơi lên màn hình kết quả
-        document.getElementById('result-user-name').innerText = nameUser;
-
-        let title = "";
-        let sub = "";
-        let desc = "";
-        let rarity = "";
-        let rank = "";
-
-        // THẦN THÁI 1: Nếu người chơi chọn Trang phục Ngầu (bo1) hoặc Make up Gothic (co1)
-        if (userOutfit.includes('Ngầu') || userMakeup.includes('Gothic')) {
-            title = "Nữ vương Rebel";
-            sub = "The Rebel Queen";
-            desc = "Bạn sở hữu một nguồn năng lượng mạnh mẽ, độc lập và đầy bí ẩn. Bạn không bận tâm đến những quy chuẩn thông thường, luôn kiên định với chất riêng và luôn là người dẫn đầu xu hướng khiến ai cũng phải ngoái nhìn.";
-            rarity = "Độ hiếm: 5%";
-            rank = "Xếp hạng: 1/8";
-        }
-        // THẦN THÁI 2: Nếu chọn đồ Đáng yêu (bo3) hoặc Make up Trong trẻo (co4) hoặc Tóc hồng (Kiểu tóc 2)
-        else if (userOutfit.includes('Đáng yêu') || userMakeup.includes('Trong trẻo') || userHair === 'Kiểu tóc 2') {
-            title = "Nàng thơ Kẹo ngọt";
-            sub = "The Sweet Muse";
-            desc = "Mang trong mình tâm hồn trong sáng, tràn đầy năng lượng tích cực và sự ấm áp. Bạn đi đến đâu là mang tiếng cười đến đó. Sự tinh tế và nét đáng yêu tự nhiên của bạn chính là liều thuốc chữa lành cho mọi người xung quanh.";
-            rarity = "Độ hiếm: 15%";
-            rank = "Xếp hạng: 4/8";
-        }
-        // THẦN THÁI 3: Nếu chọn đồ Công sở/Lịch lãm (bo2) hoặc tóc nâu dài sóng (Kiểu tóc 4)
-        else if (userOutfit.includes('Công sở') || userHair === 'Kiểu tóc 4') {
-            title = "Quý cô Thanh lịch";
-            sub = "The Elegant Lady";
-            desc = "Sự trưởng thành, điềm tĩnh và gu thẩm mỹ tinh tế là những từ khóa dành riêng cho bạn. Bạn luôn biết cách làm chủ mọi tình huống bằng sự khôn khéo, thông minh và phong thái tự tin, sang trọng của mình.";
-            rarity = "Độ hiếm: 10%";
-            rank = "Xếp hạng: 2/8";
-        }
-        // THẦN THÁI 4: Trường hợp cân bằng, đơn giản còn lại (Giống hệt ảnh mẫu 2948.jpg của bạn)
-        else {
-            title = "Cô gái bình thường";
-            sub = "Girl Next Door";
-            desc = "Bạn sống đơn giản, thực tế và không thích trở thành tâm điểm chú ý. Dù không quá nổi bật, bạn lại là kiểu người khiến người khác cảm thấy thoải mái, an tâm và tin tưởng tuyệt đối khi ở bên cạnh.";
-            rarity = "Độ hiếm: 22%";
-            rank = "Xếp hạng: 8/8";
+            
+            // Chuyển sang màn hình chọn giới tính
+            document.getElementById('screen-input-name').classList.add('hidden');
+            document.getElementById('screen-gender').classList.remove('hidden');
         }
 
-        // Đổ toàn bộ dữ liệu đã tính toán được lên giao diện màn hình kết quả
-        document.getElementById('personality-title').innerText = title;
-        document.getElementById('personality-sub').innerText = sub;
-        document.getElementById('personality-desc').innerText = desc;
-        document.getElementById('personality-rarity').innerText = rarity;
-        document.getElementById('personality-rank').innerText = rank;
+        // Bước 2: Chọn Giới tính
+        function chooseGender(gender) {
+            userGender = gender;
+            if (gender === 'nu') {
+                // Chuyển sang màn hình chọn kiểu tóc nữ
+                document.getElementById('screen-gender').classList.add('hidden');
+                document.getElementById('screen-hair-female').classList.remove('hidden');
+            } else {
+                // Nhánh cho Nam tạm thời thông báo đang phát triển
+                alert("Tính năng thiết kế cho các bạn Nam đang được hoàn thiện, bạn chọn thử nhánh Nữ trước nha!");
+            }
+        }
 
-        // Ẩn màn hình chọn make up và hiện màn hình kết quả lên
-        document.getElementById('screen-makeup-female').classList.add('hidden');
-        document.getElementById('screen-result').classList.remove('hidden');
-    }
+        // Bước 2.5: Chọn kiểu tóc Nữ -> Chuyển sang Chọn đồ
+        function selectHair(hairName) {
+            userHair = hairName;
+            document.getElementById('screen-hair-female').classList.add('hidden');
+            document.getElementById('screen-outfit-female').classList.remove('hidden');
+        }
+
+        // Bước 3: Chọn trang phục Nữ -> Chuyển sang Chọn make up
+        function selectOutfit(outfitName) {
+            userOutfit = outfitName;
+            document.getElementById('screen-outfit-female').classList.add('hidden');
+            document.getElementById('screen-makeup-female').classList.remove('hidden');
+        }
+
+        // Bước 4: Chọn Make up Nữ -> Gọi hàm tính toán kết quả tính cách
+        function selectMakeup(makeupName) {
+            userMakeup = makeupName;
+            calculatePersonality();
+        }
+
+        // Bước 5: Hệ thống tính toán điểm số và đổ dữ liệu ra màn hình kết quả
+        function calculatePersonality() {
+            // Gắn tên người dùng vào lời chào kết quả
+            document.getElementById('result-user-name').innerText = nameUser;
+
+            let title = "";
+            let sub = "";
+            let desc = "";
+            let rarity = "";
+            let rank = "";
+
+            // Kiểm tra các điều kiện phối đồ để đưa ra tính cách phù hợp
+            if (userOutfit.includes('Ngầu') || userMakeup.includes('Gothic')) {
+                title = "Nữ vương Rebel";
+                sub = "The Rebel Queen";
+                desc = "Bạn sở hữu một nguồn năng lượng mạnh mẽ, độc lập và đầy bí ẩn. Bạn không bận tâm đến những quy chuẩn thông thường, luôn kiên định với chất riêng và luôn là người dẫn đầu xu hướng khiến ai cũng phải ngoái nhìn.";
+                rarity = "Độ hiếm: 5%";
+                rank = "Xếp hạng: 1/8";
+            } 
+            else if (userOutfit.includes('Đáng yêu') || userMakeup.includes('Trong trẻo') || userHair === 'Kiểu tóc 2') {
+                title = "Nàng thơ Kẹo ngọt";
+                sub = "The Sweet Muse";
+                desc = "Mang trong mình tâm hồn trong sáng, tràn đầy năng lượng tích cực và sự ấm áp. Bạn đi đến đâu là mang tiếng cười đến đó. Sự tinh tế và nét đáng yêu tự nhiên của bạn chính là liều thuốc chữa lành cho mọi người xung quanh.";
+                rarity = "Độ hiếm: 15%";
+                rank = "Xếp hạng: 4/8";
+            } 
+            else if (userOutfit.includes('Công sở') || userHair === 'Kiểu tóc 4') {
+                title = "Quý cô Thanh lịch";
+                sub = "The Elegant Lady";
+                desc = "Sự trưởng thành, điềm tĩnh và gu thẩm mỹ tinh tế là những từ khóa dành riêng cho bạn. Bạn luôn biết cách làm chủ mọi tình huống bằng sự khôn khéo, thông minh và phong thái tự tin, sang trọng của mình.";
+                rarity = "Độ hiếm: 10%";
+                rank = "Xếp hạng: 2/8";
+            } 
+            else {
+                // Kết quả mặc định khớp chuẩn theo ảnh mẫu 2948.jpg của bạn gửi
+                title = "Cô gái bình thường";
+                sub = "Girl Next Door";
+                desc = "Bạn sống đơn giản, thực tế và không thích trở thành tâm điểm chú ý. Dù không quá nổi bật, bạn lại là kiểu người khiến người khác cảm thấy thoải mái khi ở bên.";
+                rarity = "Độ hiếm: 22%";
+                rank = "Xếp hạng: 8/8";
+            }
+
+            // Đưa thông tin tính toán được lên giao diện màn hình kết quả
+            document.getElementById('personality-title').innerText = title;
+            document.getElementById('personality-sub').innerText = sub;
+            document.getElementById('personality-desc').innerText = desc;
+            document.getElementById('personality-rarity').innerText = rarity;
+            document.getElementById('personality-rank').innerText = rank;
+
+            // Ẩn màn hình make up cũ đi và hiện màn hình kết quả lên thành công
+            document.getElementById('screen-makeup-female').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
