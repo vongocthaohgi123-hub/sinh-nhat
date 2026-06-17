@@ -1,269 +1,113 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Món Quà Bí Mật 🎉</title>
-    <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        /* Đổi nền toàn trang sang màu xanh lam dịu nhẹ */
-        body { background-color: #e0f2fe; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; position: relative; transition: all 0.5s ease; }
-        
-        /* 1. Màn hình Lá Thư */
-        .envelope-box { cursor: pointer; transition: transform 0.3s; }
-        .envelope-box:hover { transform: scale(1.05); }
-        .envelope { font-size: 80px; animation: float 2s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        
-        /* 2. Phần câu hỏi toán */
-        .hidden { display: none !important; }
-        .timer-bar { width: 100%; height: 8px; background: #eee; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
-        .timer-fill { width: 100%; height: 100%; background: #38bdf8; transition: width 0.1s linear; }
-        .btn-container { display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
-        /* Đổi màu nút bấm sang tông xanh lam tương thích */
-        .btn { background: #0ea5e9; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 25px; cursor: pointer; transition: all 0.2s; min-width: 120px; font-weight: bold; }
-        .btn:hover { background: #0284c7; transform: translateY(-2px); }
-        .input-box { width: 100%; padding: 12px; border: 2px solid #0ea5e9; border-radius: 25px; text-align: center; font-size: 18px; margin-bottom: 15px; outline: none; }
-        
-        /* 3. Nhân vật Chibi CSS */
-        .chibi-container { width: 120px; height: 160px; margin: 0 auto 20px; position: relative; }
-        .chibi-hair-back { position: absolute; width: 85px; height: 85px; background: #5c4033; border-radius: 20px 20px 10px 10px; top: 10px; left: 17px; }
-        .chibi-head { position: absolute; width: 80px; height: 75px; background: #ffe0bd; border-radius: 50% 50% 45% 45%; top: 15px; left: 20px; z-index: 2; overflow: hidden; }
-        .chibi-hair-front { position: absolute; width: 84px; height: 35px; background: #5c4033; border-radius: 20px 20px 0 0; top: 12px; left: 18px; z-index: 3; }
-        .chibi-hair-side-l { position: absolute; width: 15px; height: 55px; background: #5c4033; top: 25px; left: 13px; z-index: 3; border-radius: 5px; }
-        .chibi-hair-side-r { position: absolute; width: 15px; height: 55px; background: #5c4033; top: 25px; left: 92px; z-index: 3; border-radius: 5px; }
-        /* Mắt màu xanh lam */
-        .chibi-eye { position: absolute; width: 12px; height: 12px; background: #0284c7; border-radius: 50%; top: 40px; }
-        .chibi-eye.left { left: 18px; } .chibi-eye.right { right: 18px; }
-        .chibi-eye.happy { height: 5px; border-radius: 10px 10px 0 0; background: transparent; border: 3px solid #0284c7; border-bottom: none; top: 43px; }
-        .chibi-mouth { position: absolute; width: 14px; height: 8px; background: #ff6b81; border-radius: 0 0 14px 14px; top: 55px; left: 33px; transition: all 0.2s; }
-        .chibi-mouth.sad { border-radius: 14px 14px 0 0; height: 6px; top: 58px; background: #555; }
-        
-        /* Áo phông màu xanh lam */
-        .chibi-body { position: absolute; width: 45px; height: 50px; background: #0ea5e9; border-radius: 10px 10px 5px 5px; top: 88px; left: 37px; z-index: 1; }
-        .chibi-arm { position: absolute; width: 12px; height: 35px; background: #ffe0bd; top: 88px; border-radius: 5px; transform-origin: top center; }
-        .chibi-arm.left { left: 26px; }
-        .chibi-arm.left-sleeve { position: absolute; width: 14px; height: 15px; background: #0ea5e9; top: 88px; left: 25px; border-radius: 5px 0 0 5px; z-index: 2; }
-        .chibi-arm.right { right: 26px; transform: rotate(45deg); background: #ffe0bd; }
-        .chibi-arm.right-sleeve { position: absolute; width: 14px; height: 15px; background: #0ea5e9; top: 88px; right: 25px; border-radius: 0 5px 5px 0; z-index: 2; }
-        
-        /* Hoạt ảnh giơ tay Hello / Vẫy tay chào */
-        .waving { animation: wave 0.8s infinite alternate ease-in-out; }
-        @keyframes wave { 0% { transform: rotate(30deg); } 100% { transform: rotate(90deg); } }
-        
-        .story-text { font-size: 18px; color: #333; line-height: 1.5; margin-bottom: 20px; font-weight: 500; }
-    </style>
-</head>
-<body>
+<style>
+    body {
+        background-color: #000000; /* Đen hoàn toàn */
+        color: #ffffff; /* Chữ trắng */
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        user-select: none; /* Không cho bôi đen chữ khi bấm màn hình */
+    }
+    .container {
+        padding: 20px;
+        width: 100%;
+        max-width: 400px;
+    }
+    .hidden {
+        display: none !important; /* Dùng để ẩn các màn hình chưa dùng tới */
+    }
+    .btn {
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        padding: 10px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .input-box {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 2px solid #ffffff;
+        background: transparent;
+        color: #ffffff;
+        text-align: center;
+        margin-bottom: 15px;
+        width: 80%;
+        outline: none;
+    }
+    h1, h2 {
+        line-height: 1.4;
+    }
+</style>
 
-    <div class="card" id="game-card">
-        <!-- MÀN HÌNH 1: LÁ THƯ -->
-        <div id="part-envelope" class="envelope-box" onclick="startQuiz()">
-            <div class="envelope">✉️</div>
-            <h2>Bạn có 1 lá thư bí mật!</h2>
-            <p style="color: #666;">Chạm vào lá thư để mở qua thử thách</p>
-        </div>
-
-        <!-- MÀN HÌNH 2: TOÁN GIẢI ĐỐ -->
-        <div id="part-quiz" class="hidden">
-            <div class="timer-bar"><div class="timer-fill" id="timer"></div></div>
-            <h3 id="quiz-title" style="color: #0ea5e9;">Thử thách toán học</h3>
-            <p class="story-text" id="quiz-question">67 - 36 = ?</p>
-            
-            <!-- Trắc nghiệm -->
-            <div id="quiz-options" class="btn-container">
-                <button class="btn" id="opt1" onclick="checkAnswer(1)"></button>
-                <button class="btn" id="opt2" onclick="checkAnswer(2)"></button>
-            </div>
-            
-            <!-- Điền đáp án (Câu đặc biệt) -->
-            <div id="quiz-input-zone" class="hidden">
-                <input type="text" pattern="[0-9]*" inputmode="numeric" id="special-input" class="input-box" placeholder="Nhập kết quả phép tính...">
-                <button class="btn" onclick="checkSpecialAnswer()">Xác nhận</button>
-            </div>
-        </div>
-
-        <!-- MÀN HÌNH 3: CÔ GÁI CHIBI XUẤT HIỆN TRÒ CHUYỆN -->
-        <div id="part-chibi" class="hidden">
-            <div class="chibi-container">
-                <div class="chibi-hair-side-l"></div>
-                <div class="chibi-hair-side-r"></div>
-                <div class="chibi-hair-back"></div>
-                <div class="chibi-head">
-                    <div class="chibi-eye left" id="eye-l"></div>
-                    <div class="chibi-eye right" id="eye-r"></div>
-                    <div class="chibi-mouth" id="mouth"></div>
-                </div>
-                <div class="chibi-hair-front"></div>
-                <div class="chibi-arm left-sleeve" id="sleeve-l"></div>
-                <div class="chibi-arm left" id="arm-l"></div>
-                <div class="chibi-body"></div>
-                <div class="chibi-arm right-sleeve"></div>
-                <div class="chibi-arm right" id="arm-r"></div>
-            </div>
-            
-            <p class="story-text" id="chibi-speech">...</p>
-            
-            <div class="btn-container" id="chibi-options">
-                <!-- Nút bấm hội thoại tự động cập nhật ở đây -->
-            </div>
-        </div>
+<div class="container">
+    <div id="screen-hello" onclick="goToQuestion1()">
+        <h1>xin chào</h1>
+        <p style="color: #666; font-size: 14px;">(Chạm vào màn hình để tiếp tục)</p>
     </div>
 
-    <script>
-        // Danh sách câu hỏi trắc nghiệm
-        const quizData = [
-            { q: "67 - 36 = ?", o1: "31", o2: "21", a: 1 },
-            { q: "8 - 2 = ?", o1: "5", o2: "6", a: 2 },
-            { q: "30 + 7 = ?", o1: "37", o2: "47", a: 1 },
-            { q: "15 + 20 = ?", o1: "35", o2: "25", a: 1 }
-        ];
+    <div id="screen-ask" class="hidden">
+        <h2>Bạn có muốn tham gia trò chơi của mình không?</h2>
+        <button class="btn" onclick="chooseJoin('yes')">Có</button>
+        <button class="btn" onclick="chooseJoin('no')">Không</button>
+    </div>
 
-        let currentQuestion = 0;
-        let timerInterval;
-        let timeLeft = 100;
+    <div id="screen-sad" class="hidden">
+        <h1 style="font-size: 60px;">😭</h1>
+        <h2>Bạn có muốn thoát ra không?</h2>
+        <button class="btn" onclick="alert('Hãy tắt tab trình duyệt để thoát nhé!')">Thoát</button>
+        <button class="btn" onclick="backToAsk()">Quay lại chơi</button>
+    </div>
 
-        function startQuiz() {
-            document.getElementById('part-envelope').classList.add('hidden');
-            document.getElementById('part-quiz').classList.remove('hidden');
-            loadQuestion();
+    <div id="screen-input-name" class="hidden">
+        <h2>Hãy nhập tên của bạn</h2>
+        <input type="text" id="player-name" class="input-box" placeholder="Nhập tên ở đây..."><br>
+        <button class="btn" onclick="saveName()">Tiếp tục</button>
+    </div>
+</div>
+<script>
+    // 1. Bấm vào màn hình "xin chào" để qua câu hỏi
+    function goToQuestion1() {
+        document.getElementById('screen-hello').classList.add('hidden');
+        document.getElementById('screen-ask').classList.remove('hidden');
+    }
+
+    // 2. Xử lý khi chọn Có hoặc Không
+    function chooseJoin(answer) {
+        if (answer === 'no') {
+            // Hiện màn hình khóc
+            document.getElementById('screen-ask').classList.add('hidden');
+            document.getElementById('screen-sad').classList.remove('hidden');
+        } else {
+            // Hiện màn hình nhập tên
+            document.getElementById('screen-ask').classList.add('hidden');
+            document.getElementById('screen-input-name').classList.remove('hidden');
         }
+    }
 
-        function loadQuestion() {
-            if (currentQuestion < quizData.length) {
-                clearInterval(timerInterval);
-                timeLeft = 100;
-                document.getElementById('timer').style.width = '100%';
-                
-                let data = quizData[currentQuestion];
-                document.getElementById('quiz-question').innerText = data.q;
-                document.getElementById('opt1').innerText = data.o1;
-                document.getElementById('opt2').innerText = data.o2;
-                
-                timerInterval = setInterval(() => {
-                    timeLeft -= 1;
-                    document.getElementById('timer').style.width = timeLeft + '%';
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        alert("Hết 10 giây mất rồi! Hãy tính lại câu này nhé.");
-                        loadQuestion();
-                    }
-                }, 100);
-            } else {
-                // Sang câu hỏi phép tính đặc biệt
-                clearInterval(timerInterval);
-                document.querySelector('.timer-bar').classList.add('hidden');
-                document.getElementById('quiz-title').innerText = "🔑 Thử thách cuối cùng";
-                document.getElementById('quiz-question').innerText = "Tính kết quả phép tính sau: \n 1.000.000 - 287.991 = ?";
-                document.getElementById('quiz-options').classList.add('hidden');
-                document.getElementById('quiz-input-zone').classList.remove('hidden');
-            }
+    // 2.5. Quay lại nếu lỡ bấm Không nhưng muốn chơi tiếp
+    function backToAsk() {
+        document.getElementById('screen-sad').classList.add('hidden');
+        document.getElementById('screen-ask').classList.remove('hidden');
+    }
+
+    // 3. Lưu tên người chơi khi bấm Tiếp tục
+    let nameUser = "";
+    function saveName() {
+        let inputVal = document.getElementById('player-name').value.trim();
+        if (inputVal === "") {
+            alert("Bạn chưa nhập tên kìa!");
+        } else {
+            nameUser = inputVal;
+            alert("Hế lô " + nameUser + "! Chuẩn bị sang Bước tiếp theo nha.");
+            // Chỗ này lát nữa chúng mình sẽ viết code cho Bước 2 vào đây
         }
-
-        function checkAnswer(chosenOption) {
-            if (chosenOption === quizData[currentQuestion].a) {
-                currentQuestion++;
-                loadQuestion();
-            } else {
-                alert("Ơ sai mất rồi, thử lại nhé!");
-            }
-        }
-
-        function checkSpecialAnswer() {
-            let inputVal = document.getElementById('special-input').value.trim();
-            if (inputVal === "712009") {
-                document.getElementById('part-quiz').classList.add('hidden');
-                document.getElementById('part-chibi').classList.remove('hidden');
-                meetChibiStep1();
-            } else {
-                alert("Đáp án chưa đúng rồi, tính toán kỹ lại một chút nha!");
-            }
-        }
-
-        // --- HỘI THOẠI NHÂN VẬT CHIBI ---
-        
-        function setChibiEmotion(face) {
-            const eyeL = document.getElementById('eye-l');
-            const eyeR = document.getElementById('eye-r');
-            const mouth = document.getElementById('mouth');
-            
-            if (face === 'happy') {
-                eyeL.classList.add('happy'); eyeR.classList.add('happy');
-                mouth.classList.remove('sad');
-            } else if (face === 'sad') {
-                eyeL.classList.remove('happy'); eyeR.classList.remove('happy');
-                mouth.classList.add('sad');
-            } else {
-                eyeL.classList.remove('happy'); eyeR.classList.remove('happy');
-                mouth.classList.remove('sad');
-            }
-        }
-
-        function meetChibiStep1() {
-            // Giơ tay trái lên Hello waving ban đầu
-            document.getElementById('arm-l').classList.add('waving');
-            document.getElementById('arm-l').style.top = '75px';
-            document.getElementById('sleeve-l').classList.add('hidden'); 
-            
-            document.getElementById('chibi-speech').innerText = "Bạn biết hôm nay là ngày gì không?";
-            
-            let htmlOptions = `
-                <button class="btn" onclick="meetChibiStep1_Check('wrong')">Tui không nhớ</button>
-                <button class="btn" onclick="meetChibiStep1_Check('right')">Ngày 7/1</button>
-            `;
-            document.getElementById('chibi-options').innerHTML = htmlOptions;
-        }
-
-        function meetChibiStep1_Check(answer) {
-            if (answer === 'right') {
-                meetChibiStep2();
-            } else {
-                alert("Suy nghĩ kỹ lại xem nào, ngày này đặc biệt lắm đó!");
-            }
-        }
-
-        function meetChibiStep2() {
-            // Bỏ tay trái xuống tư thế bình thường
-            document.getElementById('arm-l').classList.remove('waving');
-            document.getElementById('arm-l').style.top = '88px';
-            document.getElementById('sleeve-l').classList.remove('hidden');
-            setChibiEmotion('normal');
-
-            document.getElementById('chibi-speech').innerText = "Hôm nay là sinh nhật của bạn đó, bạn thấy có vui không?";
-            
-            let htmlOptions = `
-                <button class="btn" onclick="meetChibiStep3('no')">Không</button>
-                <button class="btn" onclick="meetChibiStep3('yes')">Có</button>
-            `;
-            document.getElementById('chibi-options').innerHTML = htmlOptions;
-        }
-
-        function meetChibiStep3(feeling) {
-            if (feeling === 'no') {
-                setChibiEmotion('sad');
-                document.getElementById('chibi-speech').innerText = "Ồ, đừng buồn nhé vì đã có mình bên cạnh bạn nè ><";
-            } else {
-                setChibiEmotion('happy');
-                document.getElementById('chibi-speech').innerText = "Hihi, bạn vui là mình cũng vui theo đó ✨";
-            }
-            
-            let htmlOptions = `
-                <button class="btn" style="min-width:200px" onclick="meetChibiFinal()">Nhận lời chúc từ mình ❤️</button>
-            `;
-            document.getElementById('chibi-options').innerHTML = htmlOptions;
-        }
-
-        function meetChibiFinal() {
-            setChibiEmotion('happy');
-            // Nhân vật kích hoạt lại hiệu ứng vẫy tay chào tạm biệt lúc chúc mừng
-            document.getElementById('arm-l').classList.add('waving');
-            document.getElementById('arm-l').style.top = '75px';
-            document.getElementById('sleeve-l').classList.add('hidden');
-
-            document.getElementById('chibi-speech').innerHTML = "Chúc bạn sinh nhật vui vẻ, càng ngày càng học giỏi, hạnh phúc và đạt nhiều điều mình mong nha^^ 🎉🎈";
-            document.getElementById('chibi-options').innerHTML = ""; // Ẩn nút bấm, hoàn thành kịch bản
-        }
-    </script>
-</body>
-</html>
+    }
+</script>
