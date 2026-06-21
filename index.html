@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trắc Nghiệm Phong Cách & Tính Cách</title>
+    <title>Trò Chơi Siêu ỨC CHẾ</title>
     <style>
-        /* Giao diện nền tối tối giản, sang trọng */
+        /* Toàn bộ game sử dụng giao diện nền đen chữ trắng tối giản */
         body {
             background-color: #000000;
             color: #ffffff;
@@ -16,6 +16,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            user-select: none;
         }
 
         .container {
@@ -26,12 +27,42 @@
             text-align: center;
         }
 
-        h2 {
-            font-size: 21px;
-            font-weight: 500;
-            margin-bottom: 25px;
-            letter-spacing: 0.5px;
-            line-height: 1.4;
+        h2, p {
+            line-height: 1.5;
+            font-size: 18px;
+        }
+
+        /* Nút bấm của game */
+        .btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #cccccc;
+        }
+
+        .btn-flag {
+            font-size: 50px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin: 0 20px;
+            transition: transform 0.2s;
+        }
+
+        .btn-flag:hover {
+            transform: scale(1.2);
         }
 
         .input-field {
@@ -41,69 +72,69 @@
             border: 1px solid #333;
             border-radius: 8px;
             color: #fff;
-            font-size: 16px;
+            font-size: 15px;
             box-sizing: border-box;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
-        .input-field:focus {
-            outline: none;
-            border-color: #666;
-        }
-
-        .btn {
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 25px;
-            cursor: pointer;
+        /* KHU VỰC ĐỒ HỌA PIXEL MÈO DI CHUYỂN */
+        .game-map {
             width: 100%;
-            margin-bottom: 14px;
-            transition: background 0.2s;
+            height: 150px;
+            background: #111;
+            border: 2px dashed #333;
+            border-radius: 10px;
+            position: relative;
+            margin: 20px 0;
+            overflow: hidden;
         }
 
-        .btn:hover {
-            background: #cccccc;
+        .pixel-cat {
+            font-size: 30px;
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            transition: left 0.1s ease;
         }
 
-        /* Lưới hiển thị 4 bức ảnh lựa chọn (2 hàng x 2 cột) */
-        .hair-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        .objective-point {
+            font-size: 30px;
+            position: absolute;
+            bottom: 20px;
+            right: 50px;
+        }
+
+        /* Bàn phím điều khiển ảo */
+        .controls {
+            display: flex;
+            justify-content: center;
             gap: 15px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
-        .hair-option {
-            background: #111111;
-            border: 1px solid #333333;
-            border-radius: 12px;
-            padding: 6px;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .hair-option:hover {
-            transform: scale(1.02);
-            border-color: #ffffff;
-        }
-
-        .hair-option img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
+        .btn-control {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            width: 60px;
+            height: 50px;
+            font-size: 20px;
+            font-weight: bold;
             border-radius: 8px;
+            cursor: pointer;
         }
 
-        .hair-label {
-            display: block;
-            margin-top: 8px;
-            font-size: 13px;
-            color: #888;
+        .btn-control:active {
+            background: #444;
+        }
+
+        /* Khu vực hiển thị sơ đồ hình chóp */
+        .pyramid-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
         }
 
         .hidden {
@@ -115,372 +146,331 @@
 
     <div class="container">
 
-        <!-- ================= BƯỚC 0: LỜI MỜI THAM GIA ================= -->
-        <div id="screen-welcome">
-            <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">Xin chào!</h2>
-            <h2>Bạn có muốn tham gia trò chơi của mình không?</h2>
-            <button class="btn" onclick="welcomeResponse(true)">Có</button>
-            <button class="btn" onclick="welcomeResponse(false)" style="background: #222; color: #888; border: 1px solid #333;">Không</button>
+        <!-- MÀN HÌNH 1: XIN CHÀO -->
+        <div id="screen-hello">
+            <h1 style="font-size: 32px; font-weight: 300; margin-bottom: 40px;">Xin chào</h1>
+            <button class="btn" style="width: auto; border-radius: 50%; width: 50px; height: 50px; padding: 0;" onclick="nextScreen('screen-hello', 'screen-warning')">></button>
         </div>
 
-        <!-- MÀN HÌNH KHÔNG THAM GIA -->
-        <div id="screen-exit" class="hidden">
-            <h2>😭 Bạn có muốn thoát ra chứ?</h2>
-            <button class="btn" onclick="location.reload()">Quay lại chơi game</button>
-            <p style="color: #444; font-size: 14px; margin-top: 25px;">(Nếu muốn thoát, bạn có thể đóng tab trình duyệt nhé)</p>
+        <!-- MÀN HÌNH 2: CẢNH BÁO ĐỒNG TÌNH -->
+        <div id="screen-warning" class="hidden">
+            <p>Bạn sẵn sàng để chơi? Tôi cảnh báo trước là trò chơi này sẽ gây ức chế cho bạn, hông có bất cứ khiếu nại nào nhé?</p>
+            <button class="btn" onclick="nextScreen('screen-warning', 'screen-lgbt')">toi dong tinh</button>
+            <button class="btn" onclick="exitGame()" style="background: #222; color: #888; border: 1px solid #333;">toi khong dong tinh</button>
         </div>
 
-        <!-- ================= BƯỚC 1: NHẬP TÊN (NẾU CHỌN CÓ) ================= -->
-        <div id="screen-input-name" class="hidden">
-            <h2>Hihi, vậy trước tiên cho mình biết tên của bạn nè ><</h2>
-            <input type="text" id="user-name-input" class="input-field" placeholder="Nhập tên của bạn tại đây...">
-            <button class="btn" onclick="saveName()">Tiếp tục</button>
+        <!-- MÀN HÌNH LỖI VĂNG GAME -->
+        <div id="screen-crash" class="hidden">
+            <h1 style="color: #ff3333; font-size: 40px;">⚠️ LỖI HỆ THỐNG</h1>
+            <p>Ứng dụng đã bị đóng cưỡng chế do bạn từ chối điều khoản hoặc bị troll!</p>
+            <p style="color: #555; font-size: 14px;">(Vui lòng tải lại trang nếu muốn hồi sinh)</p>
         </div>
 
-        <!-- ================= BƯỚC 2: CHỌN GIỚI TÍNH ================= -->
-        <div id="screen-gender" class="hidden">
-            <h2>Bạn là nam hay là nữ?</h2>
-            <button class="btn" onclick="chooseGender('nam')">Nam</button>
-            <button class="btn" onclick="chooseGender('nu')">Nữ</button>
+        <!-- MÀN HÌNH 3: CHỌN PHE LGBT -->
+        <div id="screen-lgbt" class="hidden">
+            <h2>Bạn thuộc phe nào?</h2>
+            <div style="margin: 30px 0;">
+                <button class="btn-flag" onclick="chooseFlag('gay')">🏳️‍🌈</button>
+                <button class="btn-flag" onclick="chooseFlag('lgbt')">🏳️‍⚧️</button>
+            </div>
+            <h3 id="flag-result" style="color: #ffeb3b; min-height: 30px;"></h3>
+            <button id="btn-go-game" class="btn hidden" onclick="nextScreen('screen-lgbt', 'screen-intro-cat')">Bắt đầu vào game</button>
         </div>
 
+        <!-- MÀN HÌNH 4: GIỚI THIỆU MÈO HỘ MỆNH -->
+        <div id="screen-intro-cat" class="hidden">
+            <div style="font-size: 60px; margin-bottom: 10px;">🐱</div>
+            <p>"Bạn là một chú mèo hộ mệnh, bạn thường sẽ giúp đỡ người khó khăn"</p>
+            <button class="btn" onclick="startCatAdventure()">Tiếp tục</button>
+        </div>
 
-        <!-- ======================================================= -->
-        <!--                   NHÁNH DÀNH CHO NỮ                     -->
-        <!-- ======================================================= -->
-
-        <!-- NỮ - BƯỚC 3: CHỌN TÓC NỮ -->
-        <div id="screen-hair-female" class="hidden">
-            <h2>Đâu là phong cách kiểu tóc của bạn?</h2>
-            <div class="hair-grid">
-                <div class="hair-option" onclick="selectHairFemale('Kiểu tóc 1')">
-                    <img src="ao1.jpg" alt="Tóc Nữ 1">
-                    <span class="hair-label">Kiểu 1</span>
-                </div>
-                <div class="hair-option" onclick="selectHairFemale('Kiểu tóc 2')">
-                    <img src="ao2.jpg" alt="Tóc Nữ 2">
-                    <span class="hair-label">Kiểu 2</span>
-                </div>
-                <div class="hair-option" onclick="selectHairFemale('Kiểu tóc 3')">
-                    <img src="ao3.jpg" alt="Tóc Nữ 3">
-                    <span class="hair-label">Kiểu 3</span>
-                </div>
-                <div class="hair-option" onclick="selectHairFemale('Kiểu tóc 4')">
-                    <img src="ao4.jpg" alt="Tóc Nữ 4">
-                    <span class="hair-label">Kiểu 4</span>
-                </div>
+        <!-- MÀN HÌNH 5: BẢN ĐỒ DI CHUYỂN CỦA MÈO -->
+        <div id="screen-map-adventure" class="hidden">
+            <h2 id="map-instruction">Hãy di chuyển lại gần người gặp khó khăn và ấn nút 0</h2>
+            <div class="game-map">
+                <div id="cat-character" class="pixel-cat">🐱</div>
+                <div id="target-emoji" class="objective-point">🧍</div>
+            </div>
+            <div class="controls">
+                <button class="btn-control" onclick="moveCat(-20)">&lt;</button>
+                <button class="btn-control" onclick="interactCat()">0</button>
+                <button class="btn-control" onclick="moveCat(20)">&gt;</button>
             </div>
         </div>
 
-        <!-- NỮ - BƯỚC 4: CHỌN TRANG PHỤC NỮ -->
-        <div id="screen-outfit-female" class="hidden">
-            <h2>Đâu là phong cách ăn mặc của bạn?</h2>
-            <div class="hair-grid">
-                <div class="hair-option" onclick="selectOutfitFemale('Cá tính')">
-                    <img src="bo1.jpg" alt="Đồ Nữ 1">
-                    <span class="hair-label">Phong cách 1</span>
-                </div>
-                <div class="hair-option" onclick="selectOutfitFemale('Lịch lãm')">
-                    <img src="bo2.jpg" alt="Đồ Nữ 2">
-                    <span class="hair-label">Phong cách 2</span>
-                </div>
-                <div class="hair-option" onclick="selectOutfitFemale('Đáng yêu')">
-                    <img src="bo3.jpg" alt="Đồ Nữ 3">
-                    <span class="hair-label">Phong cách 3</span>
-                </div>
-                <div class="hair-option" onclick="selectOutfitFemale('Nhẹ nhàng')">
-                    <img src="bo4.jpg" alt="Đồ Nữ 4">
-                    <span class="hair-label">Phong cách 4</span>
-                </div>
+        <!-- MÀN HÌNH KHÓ KHĂN 1: ÔNG CHÚ VÀ CÁ -->
+        <div id="quest-uncle" class="hidden">
+            <div style="background: #111; padding: 15px; border-radius: 8px; text-align: left; margin-bottom: 20px;">
+                <p><span style="color: #ff9800;">🐱 Mèo:</span> "Xin chào"</p>
+                <p><span style="color: #2196f3;">👨 Ông chú:</span> "Chào mèo con"</p>
+                <p><span style="color: #ff9800;">🐱 Mèo:</span> "Tâm sự một chút?"</p>
+                <p><span style="color: #2196f3;">👨 Ông chú:</span> "Tôi đang ăn cơm với cá, tôi thấy ăn một tô cơm không đủ no"</p>
             </div>
+            <h2>Câu hỏi: Ông chú cần ăn bao nhiêu tô cơm mới no?</h2>
+            <button class="btn" onclick="answerUncle(true)">Ăn 3 tô cơm</button>
+            <button class="btn" onclick="answerUncle(false)">Ăn 2 tô cơm</button>
+            <p id="uncle-feedback" style="color: #ff3333; font-weight: bold;"></p>
         </div>
 
-        <!-- NỮ - BƯỚC 5: CHỌN MAKE UP NỮ -->
-        <div id="screen-makeup-female" class="hidden">
-            <h2>Đâu là phong cách make up của bạn?</h2>
-            <div class="hair-grid">
-                <div class="hair-option" onclick="selectMakeupFemale('Gothic')">
-                    <img src="co1.jpg" alt="Make up Nữ 1">
-                    <span class="hair-label">Phong cách 1</span>
-                </div>
-                <div class="hair-option" onclick="selectMakeupFemale('Tự nhiên')">
-                    <img src="co2.jpg" alt="Make up Nữ 2">
-                    <span class="hair-label">Phong cách 2</span>
-                </div>
-                <div class="hair-option" onclick="selectMakeupFemale('Sắc sảo')">
-                    <img src="co3.jpg" alt="Make up Nữ 3">
-                    <span class="hair-label">Phong cách 3</span>
-                </div>
-                <div class="hair-option" onclick="selectMakeupFemale('Trong trẻo')">
-                    <img src="co4.jpg" alt="Make up Nữ 4">
-                    <span class="hair-label">Phong cách 4</span>
-                </div>
-            </div>
+        <!-- MÀN HÌNH KHÓ KHĂN 2: HAI ANH CHÀNG -->
+        <div id="quest-colab" class="hidden">
+            <div style="font-size: 45px; margin-bottom: 10px;">👬⛰️</div>
+            <h2>Chú mèo gặp hai anh chàng colab với nhau ngoài đường để lên đỉnh. Chú mèo cần làm gì để giúp họ?</h2>
+            <button class="btn" onclick="answerColab()">Giúp họ colab</button>
+            <button class="btn" onclick="answerColab()">Giúp họ lên đỉnh</button>
+            <p id="colab-feedback" style="color: #4caf50; font-weight: bold;"></p>
         </div>
 
-
-        <!-- ======================================================= -->
-        <!--                   NHÁNH DÀNH CHO NAM                     -->
-        <!-- ======================================================= -->
-
-        <!-- NAM - BƯỚC 3: CHỌN TÓC NAM -->
-        <div id="screen-hair-male" class="hidden">
-            <h2>Đâu là phong cách kiểu tóc của bạn?</h2>
-            <div class="hair-grid">
-                <div class="hair-option" onclick="selectHairMale('Kiểu tóc 1')">
-                    <img src="do1.jpg" alt="Tóc Nam 1">
-                    <span class="hair-label">Kiểu 1</span>
-                </div>
-                <div class="hair-option" onclick="selectHairMale('Kiểu tóc 2')">
-                    <img src="do2.jpg" alt="Tóc Nam 2">
-                    <span class="hair-label">Kiểu 2</span>
-                </div>
-                <div class="hair-option" onclick="selectHairMale('Kiểu tóc 3')">
-                    <img src="do3.jpg" alt="Tóc Nam 3">
-                    <span class="hair-label">Kiểu 3</span>
-                </div>
-                <div class="hair-option" onclick="selectHairMale('Kiểu tóc 4')">
-                    <img src="do4.jpg" alt="Tóc Nam 4">
-                    <span class="hair-label">Kiểu 4</span>
-                </div>
-            </div>
+        <!-- MÀN HÌNH KHÓ KHĂN 3: VẬN ĐỘNG VIÊN BÓNG RỔ -->
+        <div id="quest-basketball" class="hidden">
+            <div style="font-size: 45px; margin-bottom: 10px;">🏀🤰</div>
+            <h2>Một vận động viên bóng rổ bị béo phì. Làm sao để giúp anh ấy thắng trận bóng?</h2>
+            <button class="btn" onclick="answerBasketball(true)">Nói rằng anh ấy có thai để đội bạn nhường</button>
+            <button class="btn" onclick="answerBasketball(false)">Dùng thuốc kích thích (vi phạm)</button>
+            <p id="basketball-feedback" style="color: #ff3333; font-weight: bold;"></p>
         </div>
 
-        <!-- NAM - BƯỚC 4: CHỌN TRANG PHỤC NAM -->
-        <div id="screen-outfit-male" class="hidden">
-            <h2>Đâu là phong cách ăn mặc của bạn?</h2>
-            <div class="hair-grid">
-                <div class="hair-option" onclick="selectOutfitMale('Cá tính')">
-                    <img src="eo1.jpg" alt="Đồ Nam 1">
-                    <span class="hair-label">Phong cách 1</span>
-                </div>
-                <div class="hair-option" onclick="selectOutfitMale('Năng động')">
-                    <img src="eo2.jpg" alt="Đồ Nam 2">
-                    <span class="hair-label">Phong cách 2</span>
-                </div>
-                <div class="hair-option" onclick="selectOutfitMale('Cuốn hút')">
-                    <img src="eo3.jpg" alt="Đồ Nam 3">
-                    <span class="hair-label">Phong cách 3</span>
-                </div>
-                <div class="hair-option" onclick="selectOutfitMale('Lãng tử')">
-                    <img src="eo4.jpg" alt="Đồ Nam 4">
-                    <span class="hair-label">Phong cách 4</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- NAM - BƯỚC 5: CHỌN KHUÔN MẶT NAM -->
-        <div id="screen-face-male" class="hidden">
-            <h2>Đâu là phong cách khuôn mặt (make up) của bạn?</h2>
-            <div class="hair-grid">
-                <div class="hair-option" onclick="selectFaceMale('Lạnh lùng')">
-                    <img src="io1.jpg" alt="Mặt Nam 1">
-                    <span class="hair-label">Phong cách 1</span>
-                </div>
-                <div class="hair-option" onclick="selectFaceMale('Điềm tĩnh')">
-                    <img src="io2.jpg" alt="Mặt Nam 2">
-                    <span class="hair-label">Phong cách 2</span>
-                </div>
-                <div class="hair-option" onclick="selectFaceMale('Dễ mến')">
-                    <img src="io3.jpg" alt="Mặt Nam 3">
-                    <span class="hair-label">Phong cách 3</span>
-                </div>
-                <div class="hair-option" onclick="selectFaceMale('Nghệ sĩ')">
-                    <img src="io4.jpg" alt="Mặt Nam 4">
-                    <span class="hair-label">Phong cách 4</span>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- ======================================================= -->
-        <!--                 MÀN HÌNH KẾT QUẢ CHUNG                  -->
-        <!-- ======================================================= -->
-        <div id="screen-result" class="hidden" style="padding: 20px 0;">
-            <p style="color: #666; font-size: 15px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Kết quả của <span id="result-user-name" style="color: #fff; font-weight: bold;">Bạn</span></p>
+        <!-- MÀN HÌNH CÂU ĐỐ TOÁN HỌC: YEUNHAU ĐỈNH CỦA CHÓP (CÓ VẼ HÌNH CHÓP) -->
+        <div id="quest-math" class="hidden">
+            <h2>Cho chóp tam giác đều ABC, tâm O, và đỉnh chóp là "YEUNHAU". Chứng minh?</h2>
             
-            <h1 id="personality-title" style="font-size: 32px; font-weight: bold; margin-top: 10px; margin-bottom: 5px; letter-spacing: 0.5px;">Chưa xác định</h1>
-            <p id="personality-sub" style="color: #666; font-size: 16px; margin-bottom: 40px; font-style: italic;">Unknown</p>
-            
-            <p id="personality-desc" style="font-size: 16px; line-height: 1.8; color: #aaaaaa; max-width: 320px; margin: 0 auto 50px auto; text-align: center;">
-                Đang tính toán kết quả tính cách...
-            </p>
-            
-            <div style="color: #444; font-size: 13px; margin-top: 20px; font-weight: 500;">
-                <span id="personality-rarity">Độ hiếm: --%</span>
-                <span style="margin: 0 10px;">•</span>
-                <span id="personality-rank">Xếp hạng: -/-</span>
+            <!-- Đồ họa Vector vẽ hình chóp trực quan -->
+            <div class="pyramid-container">
+                <svg width="220" height="200" viewBox="0 0 220 200">
+                    <!-- Các đường nét đứt bên trong khối chóp (Đường khuất) -->
+                    <line x1="30" y1="150" x2="190" y2="150" stroke="#555" stroke-width="1.5" stroke-dasharray="4,4" />
+                    <line x1="110" y1="40" x2="110" y2="145" stroke="#555" stroke-width="1.5" stroke-dasharray="4,4" />
+                    <line x1="30" y1="150" x2="110" y2="145" stroke="#555" stroke-width="1.5" stroke-dasharray="4,4" />
+                    <line x1="190" y1="150" x2="110" y2="145" stroke="#555" stroke-width="1.5" stroke-dasharray="4,4" />
+                    <line x1="120" y1="170" x2="110" y2="145" stroke="#555" stroke-width="1.5" stroke-dasharray="4,4" />
+                    
+                    <!-- Các nét liền bên ngoài khối chóp -->
+                    <line x1="110" y1="40" x2="30" y2="150" stroke="#ffffff" stroke-width="2" />
+                    <line x1="110" y1="40" x2="190" y2="150" stroke="#ffffff" stroke-width="2" />
+                    <line x1="110" y1="40" x2="120" y2="170" stroke="#ffffff" stroke-width="2" />
+                    <line x1="30" y1="150" x2="120" y2="170" stroke="#ffffff" stroke-width="2" />
+                    <line x1="120" y1="170" x2="190" y2="150" stroke="#ffffff" stroke-width="2" />
+                    
+                    <!-- Các điểm nhãn ký hiệu (A, B, C, O và đỉnh YEUNHAU) -->
+                    <text x="110" y="25" fill="#00e676" font-size="14" font-weight="bold" text-anchor="middle">YEUNHAU</text>
+                    <text x="15" y="155" fill="#ffffff" font-size="13">A</text>
+                    <text x="115" y="185" fill="#ffffff" font-size="13">B</text>
+                    <text x="200" y="155" fill="#ffffff" font-size="13">C</text>
+                    <text x="100" y="140" fill="#aaaaaa" font-size="11">O</text>
+                    
+                    <!-- Chấm tròn nhỏ tại tâm O -->
+                    <circle cx="110" cy="145" r="2" fill="#aaaaaa"/>
+                </svg>
             </div>
+
+            <input type="text" id="math-answer" class="input-field" placeholder="Nhập đáp án chứng minh của bạn...">
+            <button class="btn" onclick="checkMathAnswer()">Nộp đáp án</button>
+            <button class="btn" id="btn-hint" onclick="giveMathHint()" style="background: #222; color: #aaa; border: 1px solid #333;">Xem gợi ý (<span id="hint-count">3</span> lần)</button>
+            <p id="math-feedback" style="line-height: 1.6; font-weight: bold;"></p>
+        </div>
+
+        <!-- MÀN HÌNH CÂU ĐỐ: NGƯỜI THÔNG MINH -->
+        <div id="quest-smart" class="hidden">
+            <h2>"Người ta thường nói, người thông minh thường nói rất nhiều, bạn thấy đúng không?"</h2>
+            <button class="btn" onclick="answerSmart(true)">Đúng</button>
+            <button class="btn" onclick="answerSmart(false)">Sai</button>
+            <h2 id="smart-feedback" style="color: #00e676; margin-top: 20px;"></h2>
+            <button id="btn-go-end" class="btn hidden" onclick="nextScreen('quest-smart', 'screen-gameover')">Tiếp tục</button>
+        </div>
+
+        <!-- MÀN HÌNH KẾT THÚC VÀ TROLL -->
+        <div id="screen-gameover" class="hidden">
+            <h1 style="font-size: 36px; color: #00e676;">Trò chơi kết thúc</h1>
+            <h2>Bạn thấy thế nào?</h2>
+            <button class="btn" onclick="answerFeel()">Rất vui 🥰</button>
+            <button class="btn" onclick="answerFeel()">Ncc 🥰</button>
             
-            <button class="btn" onclick="location.reload()" style="margin-top: 45px; background: #111; border: 1px solid #333; color: #888; font-size: 14px; padding: 10px 20px; width: auto; border-radius: 6px;">Chơi lại từ đầu</button>
+            <div id="troll-zone" class="hidden" style="margin-top: 30px;">
+                <button class="btn" onclick="exitGame()" style="background: #ff3333; color: #fff;">Chơi lại nào</button>
+            </div>
         </div>
 
     </div>
 
-    <!-- ==================== LOGIC XỬ LÝ GAME ==================== -->
+    <!-- ==================== PHẦN LOGIC SCRIPT GAME ==================== -->
     <script>
-        // Các biến lưu thông tin lựa chọn của người chơi
-        let nameUser = "";
-        let userGender = "";
-        let userHair = "";
-        let userOutfit = "";
-        let userMakeup = "";
+        // Quản lý danh sách các khó khăn cần vượt qua bằng cơ chế Random mẫu
+        let questList = ['uncle', 'colab', 'basketball'];
+        let currentQuest = "";
+        let catPosition = 50; // Vị trí xuất phát của mèo
 
-        // Bước 0: Xử lý phản hồi lời mời chơi game
-        function welcomeResponse(isParticipating) {
-            document.getElementById('screen-welcome').classList.add('hidden');
-            if (isParticipating) {
-                document.getElementById('screen-input-name').classList.remove('hidden');
+        // Hàm chuyển màn hình cơ bản
+        function nextScreen(hideId, showId) {
+            document.getElementById(hideId).classList.add('hidden');
+            document.getElementById(showId).classList.remove('hidden');
+        }
+
+        // Tính năng văng game / Crash game để troll người chơi
+        function exitGame() {
+            const screens = document.querySelectorAll('.container > div');
+            screens.forEach(s => s.classList.add('hidden'));
+            document.getElementById('screen-crash').classList.remove('hidden');
+        }
+
+        // Chọn phe LGBT
+        function chooseFlag(type) {
+            const txt = document.getElementById('flag-result');
+            if (type === 'gay') {
+                txt.innerText = "bạn gay 😛";
             } else {
-                document.getElementById('screen-exit').classList.remove('hidden');
+                txt.innerText = "bạn Lgbt 😛";
             }
+            document.getElementById('btn-go-game').classList.remove('hidden');
         }
 
-        // Bước 1: Lưu tên người dùng
-        function saveName() {
-            let inputVal = document.getElementById('user-name-input').value;
-            if (inputVal.trim() === "") {
-                alert("Vui lòng nhập tên của bạn trước khi tiếp tục nha!");
-                return;
-            }
-            nameUser = inputVal;
-            
-            document.getElementById('screen-input-name').classList.add('hidden');
-            document.getElementById('screen-gender').classList.remove('hidden');
+        // Bắt đầu chuyến phiêu lưu ngẫu nhiên của mèo hộ mệnh
+        function startCatAdventure() {
+            document.getElementById('screen-intro-cat').classList.add('hidden');
+            pickRandomQuest();
         }
 
-        // Bước 2: Tách nhánh theo Giới tính
-        function chooseGender(gender) {
-            userGender = gender;
-            document.getElementById('screen-gender').classList.add('hidden');
-            
-            if (gender === 'nu') {
-                document.getElementById('screen-hair-female').classList.remove('hidden');
+        // Hàm chọn Ngẫu nhiên (Random) nhiệm vụ cho đến khi hết danh sách khó khăn
+        function pickRandomQuest() {
+            if (questList.length > 0) {
+                let randomIndex = Math.floor(Math.random() * questList.length);
+                currentQuest = questList[randomIndex];
+                questList.splice(randomIndex, 1);
+
+                const target = document.getElementById('target-emoji');
+                if (currentQuest === 'uncle') target.innerText = "👨";
+                if (currentQuest === 'colab') target.innerText = "👬";
+                if (currentQuest === 'basketball') target.innerText = "🏀";
+
+                catPosition = 50;
+                document.getElementById('cat-character').style.left = catPosition + 'px';
+                document.getElementById('map-instruction').innerText = "Hãy di chuyển lại gần người gặp khó khăn và ấn nút 0";
+                document.getElementById('screen-map-adventure').classList.remove('hidden');
             } else {
-                document.getElementById('screen-hair-male').classList.remove('hidden');
+                nextScreen('screen-map-adventure', 'quest-math');
             }
         }
 
-        /* --- CÁC HÀM XỬ LÝ NHÁNH NỮ --- */
-        function selectHairFemale(hairName) {
-            userHair = hairName;
-            document.getElementById('screen-hair-female').classList.add('hidden');
-            document.getElementById('screen-outfit-female').classList.remove('hidden');
+        // Hệ thống điều khiển nút mũi tên tiến/lùi < > của con mèo pixel
+        function moveCat(offset) {
+            catPosition += offset;
+            if (catPosition < 10) catPosition = 10;
+            if (catPosition > 350) catPosition = 350;
+            document.getElementById('cat-character').style.left = catPosition + 'px';
         }
 
-        function selectOutfitFemale(outfitName) {
-            userOutfit = outfitName;
-            document.getElementById('screen-outfit-female').classList.add('hidden');
-            document.getElementById('screen-makeup-female').classList.remove('hidden');
-        }
-
-        function selectMakeupFemale(makeupName) {
-            userMakeup = makeupName;
-            calculatePersonalityFemale();
-        }
-
-        /* --- CÁC HÀM XỬ LÝ NHÁNH NAM --- */
-        function selectHairMale(hairName) {
-            userHair = hairName;
-            document.getElementById('screen-hair-male').classList.add('hidden');
-            document.getElementById('screen-outfit-male').classList.remove('hidden');
-        }
-
-        function selectOutfitMale(outfitName) {
-            userOutfit = outfitName;
-            document.getElementById('screen-outfit-male').classList.add('hidden');
-            document.getElementById('screen-face-male').classList.remove('hidden');
-        }
-
-        function selectFaceMale(faceName) {
-            userMakeup = faceName; // dùng chung biến để tính điểm kết quả
-            calculatePersonalityMale();
-        }
-
-        /* --- HỆ THỐNG CHẤM ĐIỂM TÍNH CÁCH NỮ --- */
-        function calculatePersonalityFemale() {
-            document.getElementById('result-user-name').innerText = nameUser;
-            let title = "", sub = "", desc = "", rarity = "", rank = "";
-
-            if (userOutfit === 'Cá tính' || userMakeup === 'Gothic') {
-                title = "Nữ vương Rebel";
-                sub = "The Rebel Queen";
-                desc = "Bạn sở hữu một nguồn năng lượng mạnh mẽ, độc lập và đầy bí ẩn. Bạn không bận tâm đến những quy chuẩn thông thường, luôn kiên định với chất riêng và luôn là người dẫn đầu xu hướng khiến ai cũng phải ngoái nhìn.";
-                rarity = "Độ hiếm: 5%";
-                rank = "Xếp hạng: 1/8";
-            } 
-            else if (userOutfit === 'Đáng yêu' || userMakeup === 'Trong trẻo' || userHair === 'Kiểu tóc 2') {
-                title = "Nàng thơ Kẹo ngọt";
-                sub = "The Sweet Muse";
-                desc = "Mang trong mình tâm hồn trong sáng, tràn đầy năng lượng tích cực và sự ấm áp. Bạn đi đến đâu là mang tiếng cười đến đó. Sự tinh tế và nét đáng yêu tự nhiên của bạn chính là liều thuốc chữa lành cho mọi người xung quanh.";
-                rarity = "Độ hiếm: 15%";
-                rank = "Xếp hạng: 4/8";
-            } 
-            else if (userOutfit === 'Lịch lãm' || userHair === 'Kiểu tóc 4') {
-                title = "Quý cô Thanh lịch";
-                sub = "The Elegant Lady";
-                desc = "Sự trưởng thành, điềm tĩnh và gu thẩm mỹ tinh tế là những từ khóa dành riêng cho bạn. Bạn luôn biết cách làm chủ mọi tình huống bằng sự khôn khéo, thông minh và phong thái tự tin, sang trọng của mình.";
-                rarity = "Độ hiếm: 10%";
-                rank = "Xếp hạng: 2/8";
-            } 
-            else {
-                title = "Cô gái bình thường";
-                sub = "Girl Next Door";
-                desc = "Bạn sống đơn giản, thực tế và không thích trở thành tâm điểm chú ý. Dù không quá nổi bật, bạn lại là kiểu người khiến người khác cảm thấy vô cùng thoải mái, an tâm và tin tưởng tuyệt đối khi ở bên cạnh.";
-                rarity = "Độ hiếm: 22%";
-                rank = "Xếp hạng: 8/8";
+        // Hệ thống nhấn nút 0 để kích hoạt màn hình câu hỏi khó khăn
+        function interactCat() {
+            if (catPosition >= 270) {
+                document.getElementById('screen-map-adventure').classList.add('hidden');
+                
+                if (currentQuest === 'uncle') {
+                    document.getElementById('quest-uncle').classList.remove('hidden');
+                } else if (currentQuest === 'colab') {
+                    document.getElementById('quest-colab').classList.remove('hidden');
+                } else if (currentQuest === 'basketball') {
+                    document.getElementById('quest-basketball').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('map-instruction').innerText = "Chưa đến nơi! Hãy bấm nút > để đi sát lại gần mục tiêu đã nè!";
             }
-
-            showResult('screen-makeup-female', title, sub, desc, rarity, rank);
         }
 
-        /* --- HỆ THỐNG CHẤM ĐIỂM TÍNH CÁCH NAM --- */
-        function calculatePersonalityMale() {
-            document.getElementById('result-user-name').innerText = nameUser;
-            let title = "", sub = "", desc = "", rarity = "", rank = "";
-
-            if (userOutfit === 'Cá tính' || userMakeup === 'Lạnh lùng') {
-                title = "Sói hoang Đường phố";
-                sub = "The Street Wolf";
-                desc = "Cá tính mạnh, yêu tự do và cực kỳ phá cách. Bạn không thích bị gò bó bởi các quy tắc, luôn chọn cho mình lối đi riêng biệt, thẳng thắn và luôn tràn đầy nhiệt huyết bùng nổ, cuốn hút mọi ánh nhìn.";
-                rarity = "Độ hiếm: 7%";
-                rank = "Xếp hạng: 3/8";
-            } 
-            else if (userOutfit === 'Năng động' || userMakeup === 'Dễ mến') {
-                title = "Cậu bạn Hướng dương";
-                sub = "The Sunshine Boy";
-                desc = "Năng động, thân thiện và cực kỳ dễ mến! Bạn giống như ánh mặt trời, luôn mang đến nguồn năng lượng tích cực, sự vui vẻ và tinh thần sảng khoái khiến bất kỳ ai ở bên cạnh cũng cảm thấy ngập tràn hạnh phúc.";
-                rarity = "Độ hiếm: 18%";
-                rank = "Xếp hạng: 6/8";
-            } 
-            else if (userOutfit === 'Cuốn hút' || userMakeup === 'Điềm tĩnh') {
-                title = "Quý ông Lịch lãm";
-                sub = "The Cold Aristocrat";
-                desc = "Bên ngoài có vẻ điềm tĩnh và giữ khoảng cách, nhưng bên trong lại vô cùng sâu sắc và chín chắn. Phong thái đĩnh đạc cùng sự tập trung, khôn khéo của bạn tạo nên một sức hút nam tính vô cùng mãnh liệt, đầy bí ẩn.";
-                rarity = "Độ hiếm: 4%";
-                rank = "Xếp hạng: 1/8";
-            } 
-            else {
-                title = "Chàng trai Nghệ sĩ";
-                sub = "The Indie Soul";
-                desc = "Nhẹ nhàng, sâu sắc và sở hữu một tâm hồn nghệ thuật vô cùng lãng mạn. Bạn yêu thích những góc bình yên của cuộc sống, luôn biết lắng nghe, thấu hiểu người khác và nhìn nhận thế giới qua lăng kính đầy chất thơ.";
-                rarity = "Độ hiếm: 12%";
-                rank = "Xếp hạng: 5/8";
+        // Xử lý Đáp án Khó khăn 1: Ông chú ăn cơm cá
+        function answerUncle(isCorrect) {
+            const feedback = document.getElementById('uncle-feedback');
+            if (isCorrect) {
+                feedback.style.color = "#4caf50";
+                feedback.innerText = "Chính xác! Ông chú đã no nê. Chuẩn bị qua thử thách tiếp theo...";
+                setTimeout(() => {
+                    document.getElementById('quest-uncle').classList.add('hidden');
+                    feedback.innerText = "";
+                    pickRandomQuest();
+                }, 2000);
+            } else {
+                feedback.style.color = "#ff3333";
+                feedback.innerText = "Sai rồi, ăn 2 tô vẫn đói meo à! Chọn lại đi bạn!";
             }
-
-            showResult('screen-face-male', title, sub, desc, rarity, rank);
         }
 
-        // Hiện màn hình kết quả cuối cùng
-        function showResult(currentScreenId, title, sub, desc, rarity, rank) {
-            document.getElementById('personality-title').innerText = title;
-            document.getElementById('personality-sub').innerText = sub;
-            document.getElementById('personality-desc').innerText = desc;
-            document.getElementById('personality-rarity').innerText = rarity;
-            document.getElementById('personality-rank').innerText = rank;
+        // Xử lý Đáp án Khó khăn 2: Hai anh chàng colab (Cả hai đều đúng)
+        function answerColab() {
+            const feedback = document.getElementById('colab-feedback');
+            feedback.innerText = "Chuẩn luôn cả hai đáp án đều đúng =)) Đang chuyển cảnh...";
+            setTimeout(() => {
+                document.getElementById('quest-colab').classList.add('hidden');
+                feedback.innerText = "";
+                pickRandomQuest();
+            }, 2000);
+        }
 
-            document.getElementById(currentScreenId).classList.add('hidden');
-            document.getElementById('screen-result').classList.remove('hidden');
+        // Xử lý Đáp án Khó khăn 3: Vận động viên béo phì
+        function answerBasketball(isCorrect) {
+            const feedback = document.getElementById('basketball-feedback');
+            if (isCorrect) {
+                feedback.style.color = "#4caf50";
+                feedback.innerText = "Đúng rồi! Đội bạn nghe tin liền nhường luôn bái phục =))";
+                setTimeout(() => {
+                    document.getElementById('quest-basketball').classList.add('hidden');
+                    feedback.innerText = "";
+                    pickRandomQuest();
+                }, 2000);
+            } else {
+                feedback.style.color = "#ff3333";
+                feedback.innerText = "Dùng chất kích thích là vi phạm luật rồi dính gậy ngay! Chọn lại đi!";
+            }
+        }
+
+        // Hệ thống Gợi ý 3 lần cho câu đố YEUNHAU Đỉnh của chóp
+        let hintStage = 0;
+        function giveMathHint() {
+            hintStage++;
+            const fb = document.getElementById('math-feedback');
+            fb.style.color = "#00b0ff";
+
+            if (hintStage === 1) {
+                fb.innerText = "Gợi ý lần 1: \"Chung minh\"";
+                document.getElementById('hint-count').innerText = "2";
+            } else if (hintStage === 2) {
+                fb.innerText = "Gợi ý lần 2: \"Chung minh YEUNHAU\"";
+                document.getElementById('hint-count').innerText = "1";
+            } else if (hintStage === 3) {
+                fb.innerText = "Gợi ý lần 3: \"Chung minh YEUNHAU la dinh cua chop\"";
+                document.getElementById('hint-count').innerText = "0";
+                document.getElementById('btn-hint').disabled = true;
+            }
+        }
+
+        // Kiểm tra kết quả đáp án toán học nhập vào viết không dấu chuẩn chỉnh
+        function checkMathAnswer() {
+            let userAns = document.getElementById('math-answer').value.trim();
+            const fb = document.getElementById('math-feedback');
+
+            if (userAns.toLowerCase() === "chung minh yeunhau la dinh cua chop") {
+                fb.style.color = "#4caf50";
+                fb.innerText = "Quá xuất sắc! Bạn đúng là đỉnh của chóp luôn.";
+                setTimeout(() => {
+                    nextScreen('quest-math', 'quest-smart');
+                }, 2000);
+            } else {
+                fb.style.color = "#ff3333";
+                fb.innerText = "Sai bét nhè rồi! Hãy chú ý viết đúng mẫu chữ không dấu nha, hoặc dùng thêm nút xem Gợi ý kìa!";
+            }
+        }
+
+        // Xử lý Đáp án câu hỏi: Người thông minh nói nhiều
+        function answerSmart(isTrue) {
+            const fb = document.getElementById('smart-feedback');
+            if (!isTrue) {
+                fb.innerText = "🐱 Mèo nói: Ôi bạn thật thông minh";
+            } else {
+                fb.innerText = "🐱 Mèo nói: Sao bạn nói ngắn thế?";
+            }
+            document.getElementById('btn-go-end').classList.remove('hidden');
+        }
+
+        // Xử lý Cảm nhận màn hình kết thúc hiện icon 🥰
+        function answerFeel() {
+            document.getElementById('troll-zone').classList.remove('hidden');
         }
     </script>
 </body>
